@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:time_keeper/screens/test_screen.dart';
+import 'package:time_keeper/screens/day_screen.dart';
 import 'package:time_keeper/services/auth.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -51,7 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               onPressed: () async {
                 var user = await _auth.emailRegister(email, password);
                 if (user != null) {
-                  Navigator.pushReplacementNamed(context, TestScreen.id);
+                  Navigator.pushReplacementNamed(context, DayScreen.id);
                 }
               },
             ),

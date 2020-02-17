@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:time_keeper/screens/day_screen.dart';
 import 'package:time_keeper/screens/register_screen.dart';
-import 'package:time_keeper/screens/test_screen.dart';
 import 'package:time_keeper/services/auth.dart';
 import 'package:time_keeper/screens/login_screen.dart';
 
@@ -23,7 +23,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     _auth.getUser.then(
       (user) {
         if (user != null) {
-          Navigator.pushReplacementNamed(context, TestScreen.id);
+          Navigator.pushReplacementNamed(context, DayScreen.id);
         }
       },
     );
