@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:time_keeper/screens/day_screen.dart';
+import 'package:time_keeper/screens/day_tracker_screen.dart';
+import 'package:time_keeper/screens/edit_categories_screen.dart';
 import 'package:time_keeper/screens/login_screen.dart';
 import 'package:time_keeper/screens/register_screen.dart';
 import 'package:time_keeper/screens/welcome_screen.dart';
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
           WelcomeScreen.id: (context) => WelcomeScreen(),
           RegisterScreen.id: (context) => RegisterScreen(),
           LoginScreen.id: (context) => LoginScreen(),
-          DayScreen.id: (context) => DayScreen(),
+          DayTrackerScreen.id: (context) => DayTrackerScreen(),
+          EditCategoriesScreen.id: (context) => EditCategoriesScreen(),
         },
         theme: ThemeData.dark(),
       ),
