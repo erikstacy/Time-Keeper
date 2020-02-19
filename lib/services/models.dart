@@ -1,6 +1,7 @@
 
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class Activity {
 
@@ -22,9 +23,27 @@ class Activity {
     return Activity(
       id: doc.documentID,
       category: data['category'] ?? '',
-      startTime: data['startTime'] ?? DateTime.utc(1960),
-      endTime: data['endTime'] ?? DateTime.utc(1960),
+      startTime: DateTime.fromMillisecondsSinceEpoch(data['startTime'].seconds * 1000) ?? DateTime.utc(1960, 1, 1, 12, 0, 0),
+      endTime: DateTime.fromMillisecondsSinceEpoch(data['endTime'].seconds * 1000) ?? DateTime.utc(1960, 1, 1, 12, 0, 0),
     );
+  }
+
+  String printStartTime() {
+    return DateFormat('kk:mm').format(this.startTime);
+  }
+
+  String printEndTime() {
+    return DateFormat('kk:mm').format(this.endTime);
+  }
+
+  String printTotalTime() {
+    DateTime tempDate = this.endTime;
+    tempDate.subtract(Duration(
+      hours: this.startTime.hour,
+      minutes: this.startTime.minute,
+    ));
+
+    return DateFormat('kk:mm').format(tempDate);
   }
 
 }

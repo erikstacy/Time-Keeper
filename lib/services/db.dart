@@ -7,14 +7,6 @@ class DatabaseService {
 
   final Firestore _db = Firestore.instance;
 
-  void addActivity(FirebaseUser user) {
-    _db.collection('users').document(user.uid).collection('day_tracker').add({
-      'category': 'School',
-      'startTime': DateTime.now(),
-      'endTime': DateTime.utc(1960, 1, 1, 12, 0, 0),
-    });
-  }
-
   /*
 
     Streams
@@ -24,6 +16,11 @@ class DatabaseService {
   Stream<List<Category>> streamCategoryList(FirebaseUser user) {
     var ref = _db.collection('users').document(user.uid).collection('categories');
     return ref.snapshots().map((list) => list.documents.map((doc) => Category.fromFirestore(doc)).toList());
+  }
+
+  Stream<List<Activity>> streamActivityList(FirebaseUser user) {
+    var ref = _db.collection('users').document(user.uid).collection('dayTracker');
+    return ref.snapshots().map((list) => list.documents.map((doc) => Activity.fromFirestore(doc)).toList());
   }
 
   /*
@@ -46,6 +43,14 @@ class DatabaseService {
 
   void deleteCategory(FirebaseUser user, String categoryId) {
     _db.collection('users').document(user.uid).collection('categories').document(categoryId).delete();
+  }
+
+  void addActivity(FirebaseUser user, String categoryTitle) {
+    _db.collection('users').document(user.uid).collection('dayTracker').add({
+      'category': categoryTitle,
+      'startTime': DateTime.now(),
+      'endTime': DateTime.utc(1960, 1, 1, 12, 0, 0),
+    });
   }
 
 }
