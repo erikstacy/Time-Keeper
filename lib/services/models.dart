@@ -29,23 +29,25 @@ class Activity {
   }
 
   String printStartTime() {
-    return DateFormat('kk:mm').format(this.startTime);
+    return DateFormat('hh:mm').format(this.startTime);
   }
 
   String printEndTime() {
-    return DateFormat('kk:mm').format(this.endTime);
+    return DateFormat('hh:mm').format(this.endTime);
   }
 
   String printTotalTime() {
-    DateTime tempDate = this.endTime;
-    tempDate.subtract(Duration(
+    DateTime tempDate = this.endTime.subtract(Duration(
       hours: this.startTime.hour,
       minutes: this.startTime.minute,
     ));
 
-    return DateFormat('kk:mm').format(tempDate);
+    if (this.startTime.hour == this.endTime.hour) {
+      return '00:' + DateFormat('mm').format(tempDate);
+    } else {
+      return DateFormat('hh:mm').format(tempDate);
+    }
   }
-
 }
 
 class Category {

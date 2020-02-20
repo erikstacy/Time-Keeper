@@ -53,4 +53,10 @@ class DatabaseService {
     });
   }
 
+  void setActivityEndTime(FirebaseUser user, String activityId, DateTime dateTime) {
+    _db.collection('users').document(user.uid).collection('day_tracker').document(activityId).setData({
+      'endTime': dateTime,
+    }, merge: true);
+  }
+
 }

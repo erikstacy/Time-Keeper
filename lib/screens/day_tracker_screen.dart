@@ -27,6 +27,8 @@ class _DayTrackerScreenState extends State<DayTrackerScreen> {
 
     var user = Provider.of<FirebaseUser>(context);
 
+    List<Activity> activityList = [];
+
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -47,7 +49,7 @@ class _DayTrackerScreenState extends State<DayTrackerScreen> {
                     if (!snapshot.hasData) {
                       return LoadingScreen();
                     } else {
-                      List<Activity> activityList = snapshot.data;
+                      activityList = snapshot.data;
 
                       return ListView.builder(
                         itemCount: activityList.length,
@@ -106,7 +108,11 @@ class _DayTrackerScreenState extends State<DayTrackerScreen> {
             ),
           );
 
+          // Database writes
           _db.addActivity(user, categoryTitle);
+          if (activityList.length != 0) {
+            _db.setActivityEndTime(user, activityList[activityList.length - 1].id, DateTime.now());
+          }
         }
       ),
     );
