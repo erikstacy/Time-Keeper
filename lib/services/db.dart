@@ -19,7 +19,7 @@ class DatabaseService {
   }
 
   Stream<List<Activity>> streamActivityList(FirebaseUser user) {
-    var ref = _db.collection('users').document(user.uid).collection('dayTracker');
+    var ref = _db.collection('users').document(user.uid).collection('day_tracker');
     return ref.snapshots().map((list) => list.documents.map((doc) => Activity.fromFirestore(doc)).toList());
   }
 
@@ -46,7 +46,7 @@ class DatabaseService {
   }
 
   void addActivity(FirebaseUser user, String categoryTitle) {
-    _db.collection('users').document(user.uid).collection('dayTracker').add({
+    _db.collection('users').document(user.uid).collection('day_tracker').add({
       'category': categoryTitle,
       'startTime': DateTime.now(),
       'endTime': DateTime.utc(1960, 1, 1, 12, 0, 0),
