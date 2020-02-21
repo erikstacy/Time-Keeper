@@ -1,6 +1,7 @@
 
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 class Activity {
@@ -66,6 +67,30 @@ class Category {
     return Category(
       id: doc.documentID,
       title: data['title'] ?? '',
+    );
+  }
+
+}
+
+class TimedCategory {
+
+  String id;
+  String title;
+  String totalTime;
+
+  TimedCategory({
+    this.id,
+    this.title,
+    this.totalTime,
+  });
+
+  factory TimedCategory.fromFirestore(DocumentSnapshot doc) {
+    Map data = doc.data;
+
+    return TimedCategory(
+      id: doc.documentID,
+      title: data['title'] ?? '',
+      totalTime: data['title'] ?? '00:00',
     );
   }
 

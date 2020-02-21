@@ -74,7 +74,7 @@ class _DayTrackerScreenState extends State<DayTrackerScreen> {
         shape: CircularNotchedRectangle(),
         child: Container(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               IconButton(
                 icon: Icon(Icons.menu),
@@ -87,6 +87,12 @@ class _DayTrackerScreenState extends State<DayTrackerScreen> {
                     },
                   ),
                 ),
+              ),
+              IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  _db.endDay(user, activityList);
+                },
               ),
             ],
           ),
