@@ -10,12 +10,14 @@ class Activity {
   String category;
   DateTime startTime;
   DateTime endTime;
+  int totalTimeInMinutes;
 
   Activity({
     this.id,
     this.category,
     this.startTime,
     this.endTime,
+    this.totalTimeInMinutes,
   });
 
   factory Activity.fromFirestore(DocumentSnapshot doc) {
@@ -26,6 +28,7 @@ class Activity {
       category: data['category'] ?? '',
       startTime: DateTime.fromMillisecondsSinceEpoch(data['startTime'].seconds * 1000) ?? DateTime.utc(1960, 1, 1, 12, 0, 0),
       endTime: DateTime.fromMillisecondsSinceEpoch(data['endTime'].seconds * 1000) ?? DateTime.utc(1960, 1, 1, 12, 0, 0),
+      totalTimeInMinutes: data['totalTimeInMinutes'] ?? 0,
     );
   }
 
@@ -37,17 +40,23 @@ class Activity {
     return DateFormat('hh:mm').format(this.endTime);
   }
 
-  String printTotalTime() {
-    DateTime tempDate = this.endTime.subtract(Duration(
-      hours: this.startTime.hour,
-      minutes: this.startTime.minute,
-    ));
+  void calculateTotalTime() {
+    Duration startHours = Duration(hours: this.startTime.hour);
+    Duration startMinutes = Duration(minutes: this.startTime.minute);
+    Duration endHours = Duration(hours: this.endTime.hour);
+    Duration endMinutes = Duration(minutes: this.endTime.minute);
 
-    if (this.startTime.hour == this.endTime.hour) {
-      return '00:' + DateFormat('mm').format(tempDate);
-    } else {
-      return DateFormat('hh:mm').format(tempDate);
-    }
+    Duration startDuration = Duration(minutes: (startHours.inMinutes + startMinutes.inMinutes));
+    Duration endDuration = Duration(minutes: (endHours.inMinutes + endMinutes.inMinutes));
+
+    this.totalTimeInMinutes = endDuration.inMinutes - startDuration.inMinutes;
+  }
+
+  String printTotalTime() {
+    int minutes = this.totalTimeInMinutes % 60;
+    int hours = this.totalTimeInMinutes ~/ 60;
+
+    return hours.toString() + ":" + (minutes < 10 ? ("0" + minutes.toString()) : minutes.toString());
   }
 }
 
@@ -76,12 +85,12 @@ class TimedCategory {
 
   String id;
   String title;
-  String totalTime;
+  int totalTimeInMinutes;
 
   TimedCategory({
     this.id,
     this.title,
-    this.totalTime,
+    this.totalTimeInMinutes,
   });
 
   factory TimedCategory.fromFirestore(DocumentSnapshot doc) {
@@ -90,8 +99,19 @@ class TimedCategory {
     return TimedCategory(
       id: doc.documentID,
       title: data['title'] ?? '',
-      totalTime: data['title'] ?? '00:00',
+      totalTimeInMinutes: data['totalTimeInMinutes'] ?? 0,
     );
+  }
+
+  void addToTotalTime(int addedMinutes) {
+    this.totalTimeInMinutes += addedMinutes;
+  }
+
+  String printTotalTime() {
+    int minutes = this.totalTimeInMinutes % 60;
+    int hours = this.totalTimeInMinutes ~/ 60;
+
+    return hours.toString() + ":" + minutes.toString();
   }
 
 }

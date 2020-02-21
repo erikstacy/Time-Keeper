@@ -54,62 +54,57 @@ class DatabaseService {
     });
   }
 
-  void setActivityEndTime(FirebaseUser user, String activityId, DateTime dateTime) {
-    _db.collection('users').document(user.uid).collection('day_tracker').document(activityId).setData({
-      'endTime': dateTime,
+  void setActivityEndTime(FirebaseUser user, Activity activity) {
+    activity.endTime = DateTime.now();
+    activity.calculateTotalTime();
+
+    _db.collection('users').document(user.uid).collection('day_tracker').document(activity.id).setData({
+      'endTime': activity.endTime,
+      'totalTimeInMinutes': activity.totalTimeInMinutes,
     }, merge: true);
+  }
+
+  void clearDayTracker(FirebaseUser user) {
+    _db.collection('users').document(user.uid).collection('day_tracker');
   }
 
   void endDay(FirebaseUser user, List<Activity> activityList) {
     List<TimedCategory> timedCategoryList = [];
     bool categoryExists = false;
 
-    // Loop through the activityList
-    for (int i = 0; i < activityList.length; i++) {
-      // Loop through the timedCategoryList to check if the activityList category exists
-      if (timedCategoryList.length == 0) {
+    // Put the first Activity into the TimedCategory
+    timedCategoryList.add(TimedCategory(
+      title: activityList[0].category,
+      totalTimeInMinutes: activityList[0].totalTimeInMinutes,
+    ));
+
+    // Loop through the remaining activities in activityList
+    for (int i = 1; i < activityList.length; i++) {
+      // Loop through the timedCategoryList
+      for (int j = 0; j < timedCategoryList.length; j++) {
+        // This Activities category exists in the timeCategoryList
+        if (timedCategoryList[j].title == activityList[i].category) {
+          timedCategoryList[j].addToTotalTime(activityList[i].totalTimeInMinutes);
+          categoryExists = true;
+        }
+      }
+
+      // We looped through the whole timedCategoryList, and this Activities category didn't exist
+      if (categoryExists == false) {
         timedCategoryList.add(TimedCategory(
           title: activityList[i].category,
-          totalTime: activityList[i].printTotalTime(),
+          totalTimeInMinutes: activityList[i].totalTimeInMinutes,
         ));
-      } else {
-        for (int j = 0; j < timedCategoryList.length; j++) {
-          if (timedCategoryList[j].title == activityList[i].category) {
-            int totalHour = int.parse(timedCategoryList[j].totalTime[0] + timedCategoryList[j].totalTime[1]);
-            int totalMinute = int.parse(timedCategoryList[j].totalTime[3] + timedCategoryList[j].totalTime[4]);
-
-            int activityHour = int.parse(activityList[i].printTotalTime()[0] + activityList[i].printTotalTime()[1]);
-            int activityMinute = int.parse(activityList[i].printTotalTime()[3] + activityList[i].printTotalTime()[4]);            
-
-            totalHour += activityHour;
-            totalMinute += activityMinute;
-
-            Duration activityDuration = Duration(hours: totalHour, minutes: totalMinute);
-
-            int finalHours = activityDuration.inMinutes ~/ 60;
-            int finalMinutes = activityDuration.inMinutes % 60;
-
-            timedCategoryList[j].totalTime = (finalHours < 10 ? "0" + finalHours.toString() : finalHours.toString()) + ':' + (finalMinutes < 10 ? "0" + finalMinutes.toString() : finalMinutes.toString());
-
-            categoryExists = true;
-          }
-        }
-
-        if (categoryExists == false) {
-          timedCategoryList.add(TimedCategory(
-            title: activityList[i].category,
-            totalTime: activityList[i].printTotalTime(),
-          ));
-        }
-
-        categoryExists = false;
       }
+
+      // Reset the categoryExists
+      categoryExists = false;
     }
 
-    List<Map<String, String>> mapList = [];
+    List<Map<String, int>> mapList = [];
 
     for (int i = 0; i < timedCategoryList.length; i++) {
-      mapList.add({timedCategoryList[i].title: timedCategoryList[i].totalTime});
+      mapList.add({timedCategoryList[i].title: timedCategoryList[i].totalTimeInMinutes});
     }
 
     _db.collection('users').document(user.uid).setData({

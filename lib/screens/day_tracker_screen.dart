@@ -91,6 +91,7 @@ class _DayTrackerScreenState extends State<DayTrackerScreen> {
               IconButton(
                 icon: Icon(Icons.close),
                 onPressed: () {
+                  _db.setActivityEndTime(user, activityList[activityList.length - 1]);
                   _db.endDay(user, activityList);
                 },
               ),
@@ -117,7 +118,7 @@ class _DayTrackerScreenState extends State<DayTrackerScreen> {
           // Database writes
           _db.addActivity(user, categoryTitle);
           if (activityList.length != 0) {
-            _db.setActivityEndTime(user, activityList[activityList.length - 1].id, DateTime.now());
+            _db.setActivityEndTime(user, activityList[activityList.length - 1]);
           }
         }
       ),
