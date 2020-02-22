@@ -110,6 +110,13 @@ class DatabaseService {
     _db.collection('users').document(user.uid).setData({
       'yesterday_totals': mapList,
     }, merge: true);
+
+    // Delete all the Activity documents
+    _db.collection('users').document(user.uid).collection('day_tracker').getDocuments().then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.documents){
+        ds.reference.delete();
+      }
+    });
   }
 
 }

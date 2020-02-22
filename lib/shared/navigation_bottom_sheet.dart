@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:time_keeper/screens/day_tracker_screen.dart';
 import 'package:time_keeper/screens/edit_categories_screen.dart';
+import 'package:time_keeper/screens/welcome_screen.dart';
+import 'package:time_keeper/screens/yesterday_total_screen.dart';
+import 'package:time_keeper/services/auth.dart';
 
 class NavigationBottomSheet extends StatelessWidget {
+
+  AuthService _auth = AuthService();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -17,6 +23,19 @@ class NavigationBottomSheet extends StatelessWidget {
           title: Text('Edit Categories'),
           onTap: () {
             Navigator.pushNamed(context, EditCategoriesScreen.id);
+          },
+        ),
+        ListTile(
+          title: Text('Yesterday Totals'),
+          onTap: () {
+            Navigator.pushNamed(context, YesterdayTotalScreen.id);
+          },
+        ),
+        ListTile(
+          title: Text('Sign Out'),
+          onTap: () {
+            _auth.signOut();
+            Navigator.pushReplacementNamed(context, WelcomeScreen.id);
           },
         ),
       ],

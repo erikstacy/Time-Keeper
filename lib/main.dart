@@ -6,6 +6,7 @@ import 'package:time_keeper/screens/edit_categories_screen.dart';
 import 'package:time_keeper/screens/login_screen.dart';
 import 'package:time_keeper/screens/register_screen.dart';
 import 'package:time_keeper/screens/welcome_screen.dart';
+import 'package:time_keeper/screens/yesterday_total_screen.dart';
 import 'package:time_keeper/services/auth.dart';
 
 void main() => runApp(MyApp());
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
           LoginScreen.id: (context) => LoginScreen(),
           DayTrackerScreen.id: (context) => DayTrackerScreen(),
           EditCategoriesScreen.id: (context) => EditCategoriesScreen(),
+          YesterdayTotalScreen.id: (context) => YesterdayTotalScreen(),
         },
         theme: ThemeData.dark(),
       ),
