@@ -104,12 +104,11 @@ class DatabaseService {
     List<Map<String, int>> mapList = [];
 
     for (int i = 0; i < timedCategoryList.length; i++) {
-      mapList.add({timedCategoryList[i].title: timedCategoryList[i].totalTimeInMinutes});
+      _db.collection('users').document(user.uid).collection('yesterday_totals').add({
+        'title': timedCategoryList[i].title,
+        'totalTimeInMinutes': timedCategoryList[i].totalTimeInMinutes,
+      });
     }
-
-    _db.collection('users').document(user.uid).setData({
-      'yesterday_totals': mapList,
-    }, merge: true);
 
     // Delete all the Activity documents
     _db.collection('users').document(user.uid).collection('day_tracker').getDocuments().then((snapshot) {
