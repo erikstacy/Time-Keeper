@@ -111,7 +111,7 @@ class TimedCategory {
     int minutes = this.totalTimeInMinutes % 60;
     int hours = this.totalTimeInMinutes ~/ 60;
 
-    return hours.toString() + ":" + minutes.toString();
+    return hours.toString() + ":" + (minutes < 10 ? ("0" + minutes.toString()) : minutes.toString());
   }
 
 }

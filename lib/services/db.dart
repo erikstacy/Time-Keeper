@@ -24,6 +24,11 @@ class DatabaseService {
     return ref.snapshots().map((list) => list.documents.map((doc) => Activity.fromFirestore(doc)).toList());
   }
 
+  Stream<List<TimedCategory>> streamYesterdayTotalsList(FirebaseUser user) {
+    var ref = _db.collection('users').document(user.uid).collection('yesterday_totals');
+    return ref.snapshots().map((list) => list.documents.map((doc) => TimedCategory.fromFirestore(doc)).toList());
+  }
+
   /*
 
     Writes
@@ -100,8 +105,6 @@ class DatabaseService {
       // Reset the categoryExists
       categoryExists = false;
     }
-
-    List<Map<String, int>> mapList = [];
 
     for (int i = 0; i < timedCategoryList.length; i++) {
       _db.collection('users').document(user.uid).collection('yesterday_totals').add({
