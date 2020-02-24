@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:time_keeper/screens/day_tracker_screen.dart';
 import 'package:time_keeper/screens/edit_categories_screen.dart';
+import 'package:time_keeper/screens/weekly_total_screen.dart';
 import 'package:time_keeper/screens/welcome_screen.dart';
 import 'package:time_keeper/screens/yesterday_total_screen.dart';
 import 'package:time_keeper/services/auth.dart';
@@ -29,6 +30,12 @@ class NavigationBottomSheet extends StatelessWidget {
           title: Text('Yesterday Totals'),
           onTap: () {
             Navigator.pushNamed(context, YesterdayTotalScreen.id);
+          },
+        ),
+        ListTile(
+          title: Text('Weekly Totals'),
+          onTap: () {
+            Navigator.pushNamed(context, WeeklyTotalScreen.id);
           },
         ),
         ListTile(

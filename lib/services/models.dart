@@ -103,6 +103,14 @@ class TimedCategory {
     );
   }
 
+  factory TimedCategory.fromMap(Map data) {
+    return TimedCategory(
+      id: '0',
+      title: data['title'] ?? '',
+      totalTimeInMinutes: data['totalTimeInMinutes'] ?? 0,
+    );
+  }
+
   void addToTotalTime(int addedMinutes) {
     this.totalTimeInMinutes += addedMinutes;
   }

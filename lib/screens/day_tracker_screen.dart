@@ -90,9 +90,11 @@ class _DayTrackerScreenState extends State<DayTrackerScreen> {
               ),
               IconButton(
                 icon: Icon(Icons.close),
-                onPressed: () {
+                onPressed: () async {
                   _db.setActivityEndTime(user, activityList[activityList.length - 1]);
-                  _db.endDay(user, activityList);
+                  await _db.convertYesterdayToWeekly(user);
+                  print('your mom');
+                  await _db.endDay(user, activityList);
                 },
               ),
             ],
