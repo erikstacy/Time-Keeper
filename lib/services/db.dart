@@ -123,12 +123,28 @@ class DatabaseService {
       }
     });
 
+    // Delete weekly_totals document from Firestore
+    await _db.collection('users').document(user.uid).collection('weekly_totals').getDocuments().then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.documents){
+        print("Deleting weekly_totals: " + ds.data.toString());
+        ds.reference.delete();
+      }
+    });
+
+    // Delete monthly document from Firestore
+    await _db.collection('users').document(user.uid).collection('monthly_totals').getDocuments().then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.documents){
+        print("Deleting monthly_totals: " + ds.data.toString());
+        ds.reference.delete();
+      }
+    });
+
     // Initialize newActivityList with the first activity
     newActivityList.add(activityList[0]);
 
     // Condense the activityList so that there are no duplicate categories
     for (int i = 1; i < activityList.length; i++) {
-      for (int j = 0; j < newActivityList.length; i++) {
+      for (int j = 0; j < newActivityList.length; j++) {
         if (activityList[i].category == newActivityList[j].category) {
           sameAcivityCategory = true;
           newActivityList[j].addToTotalTime(activityList[i].totalTimeInMinutes);
@@ -147,7 +163,7 @@ class DatabaseService {
       // Populate the yesterdayTotalsList
       if (yesterdayTotalsList.length != 0) {
         for (int j = 0; j < yesterdayTotalsList.length; j++) {
-          if (i != 1 && newActivityList[i].category == yesterdayTotalsList[j].title) {
+          if (newActivityList[i].category == yesterdayTotalsList[j].title) {
             yesterdayTotalsList[j].addToTotalTime(newActivityList[i].totalTimeInMinutes);
             sameYesterdayTitle = true;
           }
@@ -165,12 +181,8 @@ class DatabaseService {
       // Populate the weeklyTotalsList
       if (weeklyTotalsList.length != 0) {
         for (int j = 0; j < weeklyTotalsList.length; j++) {
-          if (i != 1 && newActivityList[i].category == weeklyTotalsList[j].title) {
+          if (newActivityList[i].category == weeklyTotalsList[j].title) {
             weeklyTotalsList[j].addToTotalTime(newActivityList[i].totalTimeInMinutes);
-            await _db.collection('users').document(user.uid).collection('weekly_totals').document(weeklyTotalsList[j].id).setData({
-              'title': weeklyTotalsList[j].title,
-              'totalTimeInMinutes': weeklyTotalsList[j].totalTimeInMinutes,
-            }, merge: true);
             sameWeeklyTitle = true;
           }
         }
@@ -178,21 +190,17 @@ class DatabaseService {
 
       // Make a new weekly TimedCategory
       if (sameWeeklyTitle == false) {
-        await _db.collection('users').document(user.uid).collection('weekly_totals').add({
-          'title': newActivityList[i].category,
-          'totalTimeInMinutes': newActivityList[i].totalTimeInMinutes,
-        });
+        weeklyTotalsList.add(TimedCategory(
+          title: newActivityList[i].category,
+          totalTimeInMinutes: newActivityList[i].totalTimeInMinutes,
+        ));
       }
 
       // Populate the monthlyTotalsList
       if (monthlyTotalsList.length != 0) {
         for (int j = 0; j < monthlyTotalsList.length; j++) {
-          if (i != 1 && newActivityList[i].category == monthlyTotalsList[j].title) {
+          if (newActivityList[i].category == monthlyTotalsList[j].title) {
             monthlyTotalsList[j].addToTotalTime(newActivityList[i].totalTimeInMinutes);
-            await _db.collection('users').document(user.uid).collection('monthly_totals').document(monthlyTotalsList[j].id).setData({
-              'title': monthlyTotalsList[j].title,
-              'totalTimeInMinutes': monthlyTotalsList[j].totalTimeInMinutes,
-            }, merge: true);
             sameMonthlyTitle = true;
           }
         }
@@ -200,10 +208,10 @@ class DatabaseService {
 
       // Make a new monthly TimedCategory
       if (sameMonthlyTitle == false) {
-        await _db.collection('users').document(user.uid).collection('monthly_totals').add({
-          'title': newActivityList[i].category,
-          'totalTimeInMinutes': newActivityList[i].totalTimeInMinutes,
-        });
+        monthlyTotalsList.add(TimedCategory(
+          title: newActivityList[i].category,
+          totalTimeInMinutes: newActivityList[i].totalTimeInMinutes,
+        ));
       }
 
       // Reset the sameTitle bools
@@ -217,6 +225,22 @@ class DatabaseService {
       await _db.collection('users').document(user.uid).collection('yesterday_totals').add({
         'title': yesterdayTotalsList[i].title,
         'totalTimeInMinutes': yesterdayTotalsList[i].totalTimeInMinutes,
+      });
+    }
+
+    // Write the yesterdayTotalsList to Firestore
+    for (int i = 0; i < weeklyTotalsList.length; i++) {
+      await _db.collection('users').document(user.uid).collection('weekly_totals').add({
+        'title': weeklyTotalsList[i].title,
+        'totalTimeInMinutes': weeklyTotalsList[i].totalTimeInMinutes,
+      });
+    }
+
+    // Write the yesterdayTotalsList to Firestore
+    for (int i = 0; i < monthlyTotalsList.length; i++) {
+      await _db.collection('users').document(user.uid).collection('monthly_totals').add({
+        'title': monthlyTotalsList[i].title,
+        'totalTimeInMinutes': monthlyTotalsList[i].totalTimeInMinutes,
       });
     }
 
