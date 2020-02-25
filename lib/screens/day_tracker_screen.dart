@@ -162,6 +162,8 @@ class _NewCategorySheetState extends State<NewCategorySheet> {
                   child: Text(selectedCategory),
                 ),
                 onTap: () async {
+                  categoryTitle = categoryList[0].title;
+                  selectedCategory = categoryList[0].title;
                   await showModalBottomSheet(
                     context: context,
                     builder: (context) {
