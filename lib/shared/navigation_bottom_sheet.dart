@@ -21,12 +21,6 @@ class NavigationBottomSheet extends StatelessWidget {
           },
         ),
         ListTile(
-          title: Text('Edit Categories'),
-          onTap: () {
-            Navigator.pushNamed(context, EditCategoriesScreen.id);
-          },
-        ),
-        ListTile(
           title: Text('Yesterday Totals'),
           onTap: () {
             Navigator.pushNamed(context, YesterdayTotalScreen.id);
@@ -36,6 +30,12 @@ class NavigationBottomSheet extends StatelessWidget {
           title: Text('Weekly Totals'),
           onTap: () {
             Navigator.pushNamed(context, WeeklyTotalScreen.id);
+          },
+        ),
+        ListTile(
+          title: Text('Edit Categories'),
+          onTap: () {
+            Navigator.pushNamed(context, EditCategoriesScreen.id);
           },
         ),
         ListTile(

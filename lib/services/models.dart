@@ -58,6 +58,10 @@ class Activity {
 
     return hours.toString() + ":" + (minutes < 10 ? ("0" + minutes.toString()) : minutes.toString());
   }
+
+  void addToTotalTime(int addedMinutes) {
+    this.totalTimeInMinutes += addedMinutes;
+  }
 }
 
 class Category {
