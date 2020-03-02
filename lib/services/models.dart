@@ -41,15 +41,9 @@ class Activity {
   }
 
   void calculateTotalTime() {
-    Duration startHours = Duration(hours: this.startTime.hour);
-    Duration startMinutes = Duration(minutes: this.startTime.minute);
-    Duration endHours = Duration(hours: this.endTime.hour);
-    Duration endMinutes = Duration(minutes: this.endTime.minute);
+    Duration difference = this.startTime.difference(this.endTime);
 
-    Duration startDuration = Duration(minutes: (startHours.inMinutes + startMinutes.inMinutes));
-    Duration endDuration = Duration(minutes: (endHours.inMinutes + endMinutes.inMinutes));
-
-    this.totalTimeInMinutes = endDuration.inMinutes - startDuration.inMinutes;
+    this.totalTimeInMinutes = difference.inMinutes;
   }
 
   String printTotalTime() {
