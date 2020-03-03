@@ -41,7 +41,7 @@ class Activity {
   }
 
   void calculateTotalTime() {
-    Duration difference = this.startTime.difference(this.endTime);
+    Duration difference = this.endTime.difference(this.startTime);
     this.totalTimeInMinutes = difference.inMinutes;
   }
 

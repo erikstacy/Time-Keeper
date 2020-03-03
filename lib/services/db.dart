@@ -72,6 +72,7 @@ class DatabaseService {
   void setActivityEndTime(FirebaseUser user, Activity activity) {
     activity.endTime = DateTime.now();
     activity.calculateTotalTime();
+    print(activity.totalTimeInMinutes);
 
     _db.collection('users').document(user.uid).collection('day_tracker').document(activity.id).setData({
       'endTime': activity.endTime,
