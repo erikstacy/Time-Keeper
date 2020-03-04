@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:time_keeper/screens/day_tracker_screen.dart';
+import 'package:time_keeper/screens/tab_screen.dart';
 import 'package:time_keeper/services/auth.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -51,7 +52,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               onPressed: () async {
                 var user = await _auth.emailRegister(email, password);
                 if (user != null) {
-                  Navigator.pushReplacementNamed(context, DayTrackerScreen.id);
+                  Navigator.pushReplacementNamed(context, TabScreen.id);
                 }
               },
             ),
