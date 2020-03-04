@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:time_keeper/shared/bottom_bar.dart';
 
 class TotalsScreen extends StatefulWidget {
 
@@ -11,8 +12,11 @@ class TotalsScreen extends StatefulWidget {
 class _TotalsScreenState extends State<TotalsScreen> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Text('Totals'),
+    return Scaffold(
+      body: SafeArea(
+        child: Text('Totals'),
+      ),
+      bottomNavigationBar: BottomBar(1),
     );
   }
 }

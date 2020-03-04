@@ -6,8 +6,9 @@ import 'package:time_keeper/screens/day_tracker_screen.dart';
 import 'package:time_keeper/screens/edit_categories_screen.dart';
 import 'package:time_keeper/screens/login_screen.dart';
 import 'package:time_keeper/screens/monthly_total_screen.dart';
+import 'package:time_keeper/screens/profile_screen.dart';
 import 'package:time_keeper/screens/register_screen.dart';
-import 'package:time_keeper/screens/tab_screen.dart';
+import 'package:time_keeper/screens/totals_screen.dart';
 import 'package:time_keeper/screens/weekly_total_screen.dart';
 import 'package:time_keeper/screens/welcome_screen.dart';
 import 'package:time_keeper/screens/yesterday_total_screen.dart';
@@ -37,7 +38,9 @@ class MyApp extends StatelessWidget {
           YesterdayTotalScreen.id: (context) => YesterdayTotalScreen(),
           WeeklyTotalScreen.id: (context) => WeeklyTotalScreen(),
           MonthlyTotalScreen.id: (context) => MonthlyTotalScreen(),
-          TabScreen.id: (context) => TabScreen(),
+          TotalsScreen.id: (context) => TotalsScreen(),
+          CurrentActivityScreen.id: (context) => CurrentActivityScreen(),
+          ProfileScreen.id: (context) => ProfileScreen(),
         },
         theme: ThemeData.dark(),
       ),

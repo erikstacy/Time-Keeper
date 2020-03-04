@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:time_keeper/screens/current_activity_screen.dart';
 import 'package:time_keeper/screens/day_tracker_screen.dart';
-import 'package:time_keeper/screens/tab_screen.dart';
 import 'package:time_keeper/services/auth.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () async {
                 var user = await _auth.emailLogin(email, password);
                 if (user != null) {
-                  Navigator.pushReplacementNamed(context, TabScreen.id);
+                  Navigator.pushReplacementNamed(context, CurrentActivityScreen.id);
                 }
               },
             ),

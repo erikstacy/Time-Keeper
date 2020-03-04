@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:time_keeper/shared/bottom_bar.dart';
 
 class CurrentActivityScreen extends StatefulWidget {
 
@@ -21,6 +22,7 @@ class _CurrentActivityScreenState extends State<CurrentActivityScreen> {
           // TODO - Implement this
         },
       ),
+      bottomNavigationBar: BottomBar(0),
     );
   }
 }

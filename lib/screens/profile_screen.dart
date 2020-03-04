@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:time_keeper/shared/bottom_bar.dart';
 
 class ProfileScreen extends StatefulWidget {
 
@@ -11,8 +12,11 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Text('Profile'),
+    return Scaffold(
+      body: SafeArea(
+        child: Text('Profile'),
+      ),
+      bottomNavigationBar: BottomBar(2),
     );
   }
 }
