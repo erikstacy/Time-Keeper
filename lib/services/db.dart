@@ -1,264 +1,133 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart';
-import 'package:time_keeper/services/models.dart';
+import 'package:rxdart/rxdart.dart';
+import 'dart:async';
+import './globals.dart';
 
-class DatabaseService {
 
+
+class Document<T> {
   final Firestore _db = Firestore.instance;
+  final String path; 
+  DocumentReference ref;
 
-  /*
-
-    Streams
-
-  */
-
-  Stream<List<Category>> streamCategoryList(FirebaseUser user) {
-    var ref = _db.collection('users').document(user.uid).collection('categories');
-    return ref.snapshots().map((list) => list.documents.map((doc) => Category.fromFirestore(doc)).toList());
+  Document({ this.path }) {
+    ref = _db.document(path);
   }
 
-  Stream<List<Activity>> streamActivityList(FirebaseUser user) {
-    var ref = _db.collection('users').document(user.uid).collection('day_tracker');
-    return ref.snapshots().map((list) => list.documents.map((doc) => Activity.fromFirestore(doc)).toList());
+  Future<T> getData() {
+    return ref.get().then((v) => Global.models[T](v) as T);
   }
 
-  Stream<List<TimedCategory>> streamYesterdayTotalsList(FirebaseUser user) {
-    var ref = _db.collection('users').document(user.uid).collection('yesterday_totals');
-    return ref.snapshots().map((list) => list.documents.map((doc) => TimedCategory.fromFirestore(doc)).toList());
+  Stream<T> streamData() {
+    return ref.snapshots().map((v) => Global.models[T](v) as T);
   }
 
-  Stream<List<TimedCategory>> streamWeeklyTotalsList(FirebaseUser user) {
-    var ref = _db.collection('users').document(user.uid).collection('weekly_totals');
-    return ref.snapshots().map((list) => list.documents.map((doc) => TimedCategory.fromFirestore(doc)).toList());
+  Future<void> upsert(Map data) {
+    return ref.setData(Map<String, dynamic>.from(data), merge: true);
   }
 
-  Stream<List<TimedCategory>> streamMonthlyTotalsList(FirebaseUser user) {
-    var ref = _db.collection('users').document(user.uid).collection('monthly_totals');
-    return ref.snapshots().map((list) => list.documents.map((doc) => TimedCategory.fromFirestore(doc)).toList());
+  Future<void> delete() {
+    return ref.delete();
   }
 
-  /*
+}
 
-    Writes
+class Collection<T> {
+  final Firestore _db = Firestore.instance;
+  final String path; 
+  CollectionReference ref;
 
-  */
-
-  void addCategory(FirebaseUser user, String title) {
-    _db.collection('users').document(user.uid).collection('categories').add({
-      'title': title,
-    });
+  Collection({ this.path }) {
+    ref = _db.collection(path);
   }
 
-  void editCategory(FirebaseUser user, String categoryId, String title) {
-    _db.collection('users').document(user.uid).collection('categories').document(categoryId).setData({
-      'title': title,
-    }, merge: true);
+  Future<List<T>> getData() async {
+    var snapshots = await ref.getDocuments();
+    return snapshots.documents.map((doc) => Global.models[T](doc) as T ).toList();
   }
 
-  void deleteCategory(FirebaseUser user, String categoryId) {
-    _db.collection('users').document(user.uid).collection('categories').document(categoryId).delete();
+  Stream<List<T>> streamData() {
+    return ref.snapshots().map((list) => list.documents.map((doc) => Global.models[T](doc) as T).toList() );
   }
 
-  void addActivity(FirebaseUser user, String categoryTitle) {
-    _db.collection('users').document(user.uid).collection('day_tracker').add({
-      'category': categoryTitle,
-      'startTime': DateTime.now(),
-      'endTime': DateTime.utc(1960, 1, 1, 12, 0, 0),
-    });
+  Future<void> upsert(Map data) {
+    return ref.add(Map<String, dynamic>.from(data));
   }
 
-  void setActivityEndTime(FirebaseUser user, Activity activity) {
-    activity.endTime = DateTime.now();
-    activity.calculateTotalTime();
-    print(activity.totalTimeInMinutes);
+}
 
-    _db.collection('users').document(user.uid).collection('day_tracker').document(activity.id).setData({
-      'endTime': activity.endTime,
-      'totalTimeInMinutes': activity.totalTimeInMinutes,
-    }, merge: true);
-  }
+class UserDocument<T> {
+  final Firestore _db = Firestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  void clearDayTracker(FirebaseUser user) {
-    _db.collection('users').document(user.uid).collection('day_tracker');
-  }
+  Stream<T> get documentStream {
 
-  void endDay(FirebaseUser user, List<Activity> activityList) async {
-    // Create the lists that we'll be using
-    List<Activity> newActivityList = [];
-    List<TimedCategory> yesterdayTotalsList = [];
-    List<TimedCategory> weeklyTotalsList = [];
-    List<TimedCategory> monthlyTotalsList = [];
-
-    // Create the bools that we need
-    bool sameAcivityCategory = false;
-    bool sameYesterdayTitle = false;
-    bool sameWeeklyTitle = false;
-    bool sameMonthlyTitle = false;
-
-    // Delete yesterday_totals document from Firestore
-    await _db.collection('users').document(user.uid).collection('yesterday_totals').getDocuments().then((snapshot) {
-      for (DocumentSnapshot ds in snapshot.documents){
-        print("Deleting yesterday_totals: " + ds.data.toString());
-        ds.reference.delete();
+    return Observable(_auth.onAuthStateChanged).switchMap((user) {
+      if (user != null) {
+          Document<T> doc = Document<T>(path: 'users/${user.uid}'); 
+          return doc.streamData();
+      } else {
+          return Observable<T>.just(null);
       }
-    });
+    }); //.shareReplay(maxSize: 1).doOnData((d) => print('777 $d'));// as Stream<T>;
+  }
 
-    // Populate weeklyTotalsList from Firestore IF it isn't the beginning of the next week
-    if (DateTime.now().weekday != 1) {
-      await _db.collection('users').document(user.uid).collection('weekly_totals').getDocuments().then((QuerySnapshot snapshot) {
-        for (DocumentSnapshot ds in snapshot.documents){
-          weeklyTotalsList.add(TimedCategory(
-            title: ds.data['title'],
-            totalTimeInMinutes: ds.data['totalTimeInMinutes'],
-          ));
+  Future<T> getDocument() async {
+    FirebaseUser user = await _auth.currentUser();
 
-          print("Adding to weeklyTotalsList: " + ds.data.toString());
-        }
-      });
+    if (user != null) {
+      Document doc = Document<T>(path: 'users/${user.uid}'); 
+      return doc.getData();
+    } else {
+      return null;
     }
 
-    // Populate monthlyTotalsList from Firestore IF it isn't the beginning of the month
-    if (DateTime.now().day != 1) {
-      await _db.collection('users').document(user.uid).collection('monthly_totals').getDocuments().then((QuerySnapshot snapshot) {
-        for (DocumentSnapshot ds in snapshot.documents){
-          monthlyTotalsList.add(TimedCategory(
-            title: ds.data['title'],
-            totalTimeInMinutes: ds.data['totalTimeInMinutes'],
-          ));
-
-          print("Adding to monthlyTotalsList: " + ds.data.toString());
-        }
-      });
-    }
-
-    // Delete weekly_totals document from Firestore
-    await _db.collection('users').document(user.uid).collection('weekly_totals').getDocuments().then((snapshot) {
-      for (DocumentSnapshot ds in snapshot.documents){
-        print("Deleting weekly_totals: " + ds.data.toString());
-        ds.reference.delete();
-      }
-    });
-
-    // Delete monthly document from Firestore
-    await _db.collection('users').document(user.uid).collection('monthly_totals').getDocuments().then((snapshot) {
-      for (DocumentSnapshot ds in snapshot.documents){
-        print("Deleting monthly_totals: " + ds.data.toString());
-        ds.reference.delete();
-      }
-    });
-
-    // Initialize newActivityList with the first activity
-    newActivityList.add(activityList[0]);
-
-    // Condense the activityList so that there are no duplicate categories
-    for (int i = 1; i < activityList.length; i++) {
-      for (int j = 0; j < newActivityList.length; j++) {
-        if (activityList[i].category == newActivityList[j].category) {
-          sameAcivityCategory = true;
-          newActivityList[j].addToTotalTime(activityList[i].totalTimeInMinutes);
-        }
-      }
-
-      if (sameAcivityCategory == false) {
-        newActivityList.add(activityList[i]);
-      }
-
-      sameAcivityCategory = false;
-    }
-
-    // The BEAST for loop, the mashed potata's of this app
-    for (int i = 0; i < newActivityList.length; i++) {
-      // Populate the yesterdayTotalsList
-      if (yesterdayTotalsList.length != 0) {
-        for (int j = 0; j < yesterdayTotalsList.length; j++) {
-          if (newActivityList[i].category == yesterdayTotalsList[j].title) {
-            yesterdayTotalsList[j].addToTotalTime(newActivityList[i].totalTimeInMinutes);
-            sameYesterdayTitle = true;
-          }
-        }
-      }
-
-      // Make a new yesterday TimedCategory
-      if (sameYesterdayTitle == false) {
-        yesterdayTotalsList.add(TimedCategory(
-          title: newActivityList[i].category,
-          totalTimeInMinutes: newActivityList[i].totalTimeInMinutes,
-        ));
-      }
-
-      // Populate the weeklyTotalsList
-      if (weeklyTotalsList.length != 0) {
-        for (int j = 0; j < weeklyTotalsList.length; j++) {
-          if (newActivityList[i].category == weeklyTotalsList[j].title) {
-            weeklyTotalsList[j].addToTotalTime(newActivityList[i].totalTimeInMinutes);
-            sameWeeklyTitle = true;
-          }
-        }
-      }
-
-      // Make a new weekly TimedCategory
-      if (sameWeeklyTitle == false) {
-        weeklyTotalsList.add(TimedCategory(
-          title: newActivityList[i].category,
-          totalTimeInMinutes: newActivityList[i].totalTimeInMinutes,
-        ));
-      }
-
-      // Populate the monthlyTotalsList
-      if (monthlyTotalsList.length != 0) {
-        for (int j = 0; j < monthlyTotalsList.length; j++) {
-          if (newActivityList[i].category == monthlyTotalsList[j].title) {
-            monthlyTotalsList[j].addToTotalTime(newActivityList[i].totalTimeInMinutes);
-            sameMonthlyTitle = true;
-          }
-        }
-      }
-
-      // Make a new monthly TimedCategory
-      if (sameMonthlyTitle == false) {
-        monthlyTotalsList.add(TimedCategory(
-          title: newActivityList[i].category,
-          totalTimeInMinutes: newActivityList[i].totalTimeInMinutes,
-        ));
-      }
-
-      // Reset the sameTitle bools
-      sameYesterdayTitle = false;
-      sameWeeklyTitle = false;
-      sameMonthlyTitle = false;
-    }
-
-    // Write the yesterdayTotalsList to Firestore
-    for (int i = 0; i < yesterdayTotalsList.length; i++) {
-      await _db.collection('users').document(user.uid).collection('yesterday_totals').add({
-        'title': yesterdayTotalsList[i].title,
-        'totalTimeInMinutes': yesterdayTotalsList[i].totalTimeInMinutes,
-      });
-    }
-
-    // Write the yesterdayTotalsList to Firestore
-    for (int i = 0; i < weeklyTotalsList.length; i++) {
-      await _db.collection('users').document(user.uid).collection('weekly_totals').add({
-        'title': weeklyTotalsList[i].title,
-        'totalTimeInMinutes': weeklyTotalsList[i].totalTimeInMinutes,
-      });
-    }
-
-    // Write the yesterdayTotalsList to Firestore
-    for (int i = 0; i < monthlyTotalsList.length; i++) {
-      await _db.collection('users').document(user.uid).collection('monthly_totals').add({
-        'title': monthlyTotalsList[i].title,
-        'totalTimeInMinutes': monthlyTotalsList[i].totalTimeInMinutes,
-      });
-    }
-
-    // Delete day_tracker documents
-    await _db.collection('users').document(user.uid).collection('day_tracker').getDocuments().then((snapshot) {
-      for (DocumentSnapshot ds in snapshot.documents){
-        ds.reference.delete();
-      }
-    });
   }
+
+  Future<void> upsert(Map data) async {
+    FirebaseUser user = await _auth.currentUser();
+    Document<T> ref = Document(path:  'users/${user.uid}');
+    return ref.upsert(data);
+  }
+
+}
+
+class UserCollection<T> {
+  final Firestore _db = Firestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final String path;
+
+  UserCollection({ this.path });
+
+  Stream<List<T>> get collectionStream {
+
+    return Observable(_auth.onAuthStateChanged).switchMap((user) {
+      if (user != null) {
+          Collection<T> doc = Collection<T>(path: 'users/${user.uid}/$path'); 
+          return doc.streamData();
+      } else {
+          return Observable<List<T>>.just(null);
+      }
+    }); //.shareReplay(maxSize: 1).doOnData((d) => print('777 $d'));// as Stream<T>;
+  }
+
+  Future<List<T>> getCollection() async {
+    FirebaseUser user = await _auth.currentUser();
+
+    if (user != null) {
+      Collection doc = Collection<T>(path: 'users/${user.uid}/$path'); 
+      return doc.getData();
+    } else {
+      return null;
+    }
+
+  }
+
+  Future<void> upsert(Map data) async {
+    FirebaseUser user = await _auth.currentUser();
+    Collection<T> ref = Collection(path:  'users/${user.uid}/$path');
+    return ref.upsert(data);
+  }
+
 }

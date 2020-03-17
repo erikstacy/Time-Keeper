@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:time_keeper/screens/current_activity_screen.dart';
-import 'package:time_keeper/screens/day_tracker_screen.dart';
+import 'package:time_keeper/screens/main_screen.dart';
 import 'package:time_keeper/screens/register_screen.dart';
-import 'package:time_keeper/screens/totals_screen.dart';
 import 'package:time_keeper/services/auth.dart';
 import 'package:time_keeper/screens/login_screen.dart';
+import 'package:time_keeper/services/globals.dart';
 
 class WelcomeScreen extends StatefulWidget {
 
@@ -25,7 +25,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     _auth.getUser.then(
       (user) {
         if (user != null) {
-          Navigator.pushReplacementNamed(context, CurrentActivityScreen.id);
+          Navigator.pushReplacementNamed(context, MainScreen.id);
         }
       },
     );
