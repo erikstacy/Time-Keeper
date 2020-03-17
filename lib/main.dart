@@ -9,7 +9,6 @@ import 'package:time_keeper/screens/main_screen.dart';
 import 'package:time_keeper/screens/profile_screen.dart';
 import 'package:time_keeper/screens/register_screen.dart';
 import 'package:time_keeper/screens/totals_screen.dart';
-import 'package:time_keeper/screens/welcome_screen.dart';
 import 'package:time_keeper/services/auth.dart';
 import 'package:time_keeper/services/globals.dart';
 import 'package:time_keeper/services/models.dart';
@@ -30,9 +29,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Time Keeper',
-        initialRoute: MainScreen.id,
+        initialRoute: LoginScreen.id,
         routes: {
-          WelcomeScreen.id: (context) => WelcomeScreen(),
           RegisterScreen.id: (context) => RegisterScreen(),
           LoginScreen.id: (context) => LoginScreen(),
           MainScreen.id: (context) => MainScreen(),

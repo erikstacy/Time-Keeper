@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:time_keeper/screens/login_screen.dart';
 import 'package:time_keeper/services/auth.dart';
 import 'package:time_keeper/services/models.dart';
 import 'package:time_keeper/shared/page_title.dart';
@@ -21,8 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.all(10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Stack(
           children: <Widget>[
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -41,7 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         radius: 50,
                       ),
-                      SizedBox(height: 20,),
+                      SizedBox(height: 40,),
                       Text(
                         user.email,
                         style: TextStyle(
@@ -55,11 +55,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             Container(
               margin: EdgeInsets.only(bottom: 30),
-              child: RaisedButton(
-                child: Text('Sign Out'),
-                onPressed: () {
-                  AuthService().signOut();
-                },
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: RaisedButton(
+                  child: Text('Sign Out'),
+                  onPressed: () {
+                    AuthService().signOut();
+                    Navigator.pushReplacementNamed(context, LoginScreen.id);
+                  },
+                ),
               ),
             ),
           ],
