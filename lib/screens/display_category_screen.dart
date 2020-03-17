@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:time_keeper/screens/main_screen.dart';
 import 'package:time_keeper/services/globals.dart';
 import 'package:time_keeper/services/models.dart';
 import 'package:time_keeper/shared/page_title.dart';
@@ -72,7 +73,8 @@ class _DisplayCategoryScreenState extends State<DisplayCategoryScreen> {
                           FlatButton(
                             child: Text('YES'),
                             onPressed: () {
-                              // Todo - Implement this
+                              category.delete();
+                              Navigator.popUntil(context, ModalRoute.withName(MainScreen.id));
                             },
                           ),
                           FlatButton(

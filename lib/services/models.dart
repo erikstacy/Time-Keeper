@@ -80,6 +80,15 @@ class Category {
     });
   }
 
+  void initializeCategory(String title) {
+    this.title = title;
+    todayTime = 0;
+    yesterdayTime = 0;
+    weekTime = 0;
+    monthTime = 0;
+    addToDb();
+  }
+
   String formatTime(int timeInMinutes) {
     int minutes = timeInMinutes % 60;
     int hours = timeInMinutes ~/ 60;

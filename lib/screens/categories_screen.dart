@@ -18,6 +18,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   Widget build(BuildContext context) {
 
     List<Category> categoryList = Provider.of<List<Category>>(context);
+    categoryList.sort((a, b) => a.title.compareTo(b.title));
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -26,14 +27,22 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           showDialog(
             context: context,
             builder: (context) {
+
+              String title;
+
               return AlertDialog(
                 title: Text('New Category'),
-                content: TextField(),
+                content: TextField(
+                  onChanged: (value) {
+                    title = value;
+                  },
+                ),
                 actions: <Widget>[
                   FlatButton(
                     child: Text('SAVE'),
                     onPressed: () {
-                      // Todo - Implement this
+                      Category().initializeCategory(title);
+                      Navigator.pop(context);
                     },
                   ),
                 ],

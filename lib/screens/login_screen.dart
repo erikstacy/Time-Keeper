@@ -19,6 +19,19 @@ class _LoginScreenState extends State<LoginScreen> {
   String password = "";
 
   @override
+  void initState() {
+    super.initState();
+
+    _auth.getUser.then(
+      (user) {
+        if (user != null) {
+          Navigator.pushReplacementNamed(context, MainScreen.id);
+        }
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
