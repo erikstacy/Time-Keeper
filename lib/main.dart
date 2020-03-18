@@ -8,6 +8,7 @@ import 'package:time_keeper/screens/login_screen.dart';
 import 'package:time_keeper/screens/main_screen.dart';
 import 'package:time_keeper/screens/profile_screen.dart';
 import 'package:time_keeper/screens/register_screen.dart';
+import 'package:time_keeper/screens/task_screen.dart';
 import 'package:time_keeper/screens/totals_screen.dart';
 import 'package:time_keeper/services/auth.dart';
 import 'package:time_keeper/services/globals.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         StreamProvider<FirebaseUser>.value(value: _auth.user),
         StreamProvider<List<Category>>.value(value: Global.categoryCollection.collectionStream),
         StreamProvider<User>.value(value: Global.userDocument.documentStream),
+        StreamProvider<Task>.value(value: Global.taskDocument.documentStream),
       ],
       child: MaterialApp(
         title: 'Time Keeper',
@@ -39,6 +41,7 @@ class MyApp extends StatelessWidget {
           TotalsScreen.id: (context) => TotalsScreen(),
           CategoriesScreen.id: (context) => CategoriesScreen(),
           DisplayCategoryScreen.id: (context) => DisplayCategoryScreen(),
+          TaskScreen.id: (context) => TaskScreen(),
         },
         theme: ThemeData.dark(),
       ),

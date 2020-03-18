@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:time_keeper/screens/task_screen.dart';
 import 'package:time_keeper/services/models.dart';
 import 'package:time_keeper/shared/page_title.dart';
 
@@ -11,14 +13,11 @@ class CurrentActivityScreen extends StatefulWidget {
 }
 
 class _CurrentActivityScreenState extends State<CurrentActivityScreen> {
-
-  Task task = Task(
-    categoryTitle: 'Music',
-    startTime: DateTime(2020, 3, 15, 11, 0),
-  );
-
   @override
   Widget build(BuildContext context) {
+
+    Task task = Provider.of<Task>(context);
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(10),
@@ -90,7 +89,7 @@ class TaskCard extends StatelessWidget {
                 FlatButton(
                   child: Text('DONE'),
                   onPressed: () {
-                    // Todo - IMplement this
+                    Navigator.pushNamed(context, TaskScreen.id);
                   },
                 ),
               ],

@@ -70,6 +70,15 @@ class Category {
     });
   }
 
+  void updateDb() {
+    doc.upsert({
+      "todayTime": todayTime,
+      "yesterdayTime": yesterdayTime,
+      "weekTime": weekTime,
+      "monthTime": monthTime,
+    });
+  }
+
   void delete() {
     doc.delete();
   }
@@ -175,12 +184,10 @@ class Task {
     Map data = doc.data;
 
     return Task(
-      id: data['id'],
+      id: doc.documentID,
       doc: Document<Task>(path: doc.reference.path),
-      categoryTitle: data['categoryTitle'],
+      categoryTitle: data['categoryTitle'] ?? '',
       startTime: DateTime.fromMillisecondsSinceEpoch(data['startTime'].seconds * 1000) ?? DateTime.utc(1960, 1, 1, 12, 0, 0),
-      endTime: DateTime.fromMillisecondsSinceEpoch(data['endTime'].seconds * 1000) ?? DateTime.utc(1960, 1, 1, 12, 0, 0),
-      totalTimeInMinutes: data['totalTimeInMinutes'],
     );
   }
 
@@ -188,8 +195,23 @@ class Task {
     return "Start Time: " + DateFormat('hh:mm').format(this.startTime);
   }
 
-  void finishTask() {
+  void finishTask(List<Category> categoryList) {
     endTime = DateTime.now();
     totalTimeInMinutes = endTime.difference(startTime).inMinutes;
+
+    for (Category category in categoryList) {
+      if (category.title == this.categoryTitle) {
+        category.todayTime += this.totalTimeInMinutes;
+        category.updateDb();
+      }
+    }
   }
+
+  void addToDb() {
+    Global.taskDocument.upsert({
+      'categoryTitle': categoryTitle,
+      'startTime': DateTime.now(),
+    });
+  }
+
 }

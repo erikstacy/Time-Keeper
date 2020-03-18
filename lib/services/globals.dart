@@ -12,9 +12,11 @@ class Global {
   static final Map models = {
     Category: (data) => Category.fromFirestore(data),
     User: (data) => User.fromFirestore(data),
+    Task: (data) => Task.fromFirestore(data),
   };
 
   static final UserCollection<Category> categoryCollection = UserCollection<Category>(path: 'categories');
   static final UserDocument<User> userDocument = UserDocument<User>();
+  static final UserDocument<Task> taskDocument = UserDocument<Task>();
 
 }
