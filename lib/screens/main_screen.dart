@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:time_keeper/screens/categories_screen.dart';
 import 'package:time_keeper/screens/current_activity_screen.dart';
 import 'package:time_keeper/screens/profile_screen.dart';
+import 'package:time_keeper/screens/task_screen.dart';
 import 'package:time_keeper/screens/totals_screen.dart';
+import 'package:time_keeper/services/models.dart';
 
 class MainScreen extends StatefulWidget {
 
@@ -21,6 +24,16 @@ class _MainScreenState extends State<MainScreen> {
     CategoriesScreen(),
     ProfileScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    Task task = Provider.of<Task>(context);
+    if (task.categoryTitle == '') {
+      Navigator.pushNamed(context, TaskScreen.id);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
