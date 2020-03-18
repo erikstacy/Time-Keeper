@@ -27,6 +27,35 @@ class _CurrentActivityScreenState extends State<CurrentActivityScreen> {
             PageTitle(title: "Current Activity",),
             SizedBox(height: 10,),
             TaskCard(task: task),
+            SizedBox(height: 10,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Card(
+                elevation: 3,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 30, top: 10, bottom: 10, right: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'End the day',
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                      FlatButton(
+                        child: Text('CONFIRM'),
+                        onPressed: () {                           
+                          List<Category> categoryList = Provider.of<List<Category>>(context);
+                          task.endDay(categoryList);
+                          Navigator.pushNamed(context, TaskScreen.id);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

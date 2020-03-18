@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:time_keeper/services/globals.dart';
 import 'db.dart';
@@ -160,6 +161,21 @@ class Category {
 
     return time;
   }
+
+  void endDay() {
+    this.yesterdayTime = this.todayTime;
+    this.todayTime = 0;
+
+    if (DateTime.now().weekday == 1) {
+      this.weekTime = 0;
+    }
+
+    if (DateTime.now().day == 1) {
+      this.monthTime = 0;
+    }
+
+    updateDb();
+  }
 }
 
 class Task {
@@ -202,9 +218,12 @@ class Task {
     for (Category category in categoryList) {
       if (category.title == this.categoryTitle) {
         category.todayTime += this.totalTimeInMinutes;
+        category.weekTime += this.totalTimeInMinutes;
+        category.monthTime += this.totalTimeInMinutes;
         category.updateDb();
       }
     }
+    categoryTitle = '';
   }
 
   void addToDb() {
@@ -212,6 +231,13 @@ class Task {
       'categoryTitle': categoryTitle,
       'startTime': DateTime.now(),
     });
+  }
+
+  void endDay(List<Category> categoryList) {
+    finishTask(categoryList);
+    for (Category category in categoryList) {
+      category.endDay();
+    }
   }
 
 }

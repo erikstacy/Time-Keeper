@@ -79,7 +79,9 @@ class _TaskScreenState extends State<TaskScreen> {
                       child: Text('CONFIRM'),
                     ),
                     onPressed: () {
-                      task.finishTask(categoryList);
+                      if (task.categoryTitle != '') {
+                        task.finishTask(categoryList);
+                      }
                       Task(categoryTitle: ddCategory.title).addToDb();
                       Navigator.pop(context);
                     },
