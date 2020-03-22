@@ -26,16 +26,6 @@ class _MainScreenState extends State<MainScreen> {
   ];
 
   @override
-  void initState() {
-    super.initState();
-
-    Task task = Provider.of<Task>(context);
-    if (task.categoryTitle == '') {
-      Navigator.pushNamed(context, TaskScreen.id);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnimatedContainer(

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:time_keeper/screens/display_category_screen.dart';
 import 'package:time_keeper/services/globals.dart';
 import 'package:time_keeper/services/models.dart';
+import 'package:time_keeper/shared/loading.dart';
 import 'package:time_keeper/shared/page_title.dart';
 
 class CategoriesScreen extends StatefulWidget {
@@ -20,58 +21,65 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     List<Category> categoryList = Provider.of<List<Category>>(context);
     categoryList.sort((a, b) => a.title.compareTo(b.title));
 
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
+    if (categoryList != null) {
+      return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) {
 
-              String title;
+                String title;
 
-              return AlertDialog(
-                title: Text('New Category'),
-                content: TextField(
-                  onChanged: (value) {
-                    title = value;
-                  },
-                ),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text('SAVE'),
-                    onPressed: () {
-                      Category().initializeCategory(title);
-                      Navigator.pop(context);
+                return AlertDialog(
+                  title: Text('New Category'),
+                  content: TextField(
+                    onChanged: (value) {
+                      title = value;
                     },
                   ),
-                ],
-              );
-            }
-          );
-        },
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              PageTitle(title: "Categories",),
-              SizedBox(height: 10,),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: categoryList.length,
-                  itemBuilder: (context, index) {
-                    return _CategoryCard(category: categoryList[index],);
-                  },
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('SAVE'),
+                      onPressed: () {
+                        Category().initializeCategory(title);
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                );
+              }
+            );
+          },
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                PageTitle(title: "Categories",),
+                SizedBox(height: 10,),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: categoryList.length,
+                    itemBuilder: (context, index) {
+                      return _CategoryCard(category: categoryList[index],);
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Align(
+        alignment: Alignment.center,
+        child: Loader(),
+      );
+    }
   }
 }
 

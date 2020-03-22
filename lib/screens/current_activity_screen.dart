@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:time_keeper/screens/task_screen.dart';
 import 'package:time_keeper/services/models.dart';
+import 'package:time_keeper/shared/loading.dart';
 import 'package:time_keeper/shared/page_title.dart';
 
 class CurrentActivityScreen extends StatefulWidget {
@@ -18,48 +19,55 @@ class _CurrentActivityScreenState extends State<CurrentActivityScreen> {
 
     Task task = Provider.of<Task>(context);
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            PageTitle(title: "Current Activity",),
-            SizedBox(height: 10,),
-            TaskCard(task: task),
-            SizedBox(height: 10,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Card(
-                elevation: 3,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 30, top: 10, bottom: 10, right: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        'End the day',
-                        style: TextStyle(
-                          fontSize: 16,
+    if (task != null) {
+      return SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              PageTitle(title: "Current Activity",),
+              SizedBox(height: 10,),
+              TaskCard(task: task),
+              SizedBox(height: 10,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Card(
+                  elevation: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 30, top: 10, bottom: 10, right: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          'End the day',
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
-                      FlatButton(
-                        child: Text('CONFIRM'),
-                        onPressed: () {                           
-                          List<Category> categoryList = Provider.of<List<Category>>(context);
-                          task.endDay(categoryList);
-                          Navigator.pushNamed(context, TaskScreen.id);
-                        },
-                      ),
-                    ],
+                        FlatButton(
+                          child: Text('CONFIRM'),
+                          onPressed: () {                           
+                            List<Category> categoryList = Provider.of<List<Category>>(context);
+                            task.endDay(categoryList);
+                            Navigator.pushNamed(context, TaskScreen.id);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Align(
+        alignment: Alignment.center,
+        child: Loader(),
+      );
+    }
   }
 }
 

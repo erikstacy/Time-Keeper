@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:time_keeper/screens/current_activity_screen.dart';
 import 'package:time_keeper/screens/login_screen.dart';
 import 'package:time_keeper/screens/main_screen.dart';
+import 'package:time_keeper/screens/task_screen.dart';
 import 'package:time_keeper/services/auth.dart';
 import 'package:time_keeper/shared/page_title.dart';
 
@@ -117,6 +117,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       var user = await _auth.emailRegister(email, password);
                       if (user != null) {
                         Navigator.pushReplacementNamed(context, MainScreen.id);
+                        Navigator.pushNamed(context, TaskScreen.id);
                       }
                     },
                   ),

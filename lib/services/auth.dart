@@ -15,6 +15,7 @@ class AuthService {
   Future<FirebaseUser> emailRegister(String email, String password) async {
     FirebaseUser user = await _auth.createUserWithEmailAndPassword(email: email, password: password);
     updateUserData(user);
+    initializeUser(user);
     return user;
   }
 
@@ -31,6 +32,23 @@ class AuthService {
       'uid': user.uid,
       'email': user.email,
     }, merge: true);
+  }
+
+  void initializeUser(FirebaseUser user) {
+    DocumentReference userRef = _db.collection('users').document(user.uid);
+
+    userRef.setData({
+      'categoryTitle': '..newUser',
+      'startTime': DateTime.utc(1960, 1, 1, 12, 0, 0),
+    }, merge: true);
+
+    _db.collection('users').document(user.uid).collection('categories').add({
+      "title": 'Temporary',
+      "todayTime": 0,
+      "yesterdayTime": 0,
+      "weekTime": 0,
+      "monthTime": 0,
+    });
   }
 
   Future<void> signOut() {

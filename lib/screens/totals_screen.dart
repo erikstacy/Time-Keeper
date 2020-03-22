@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:time_keeper/services/models.dart';
+import 'package:time_keeper/shared/loading.dart';
 
 class TotalsScreen extends StatefulWidget {
 
@@ -13,33 +14,35 @@ class TotalsScreen extends StatefulWidget {
 class _TotalsScreenState extends State<TotalsScreen> {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 4,
-      child: Scaffold(
-        body: TabBarView(
-          children: <Widget>[
-            CategoryListWidget(currentTab: 0,),
-            CategoryListWidget(currentTab: 1,),
-            CategoryListWidget(currentTab: 2,),
-            CategoryListWidget(currentTab: 3,),
-          ],
-        ),
-        appBar: TabBar(
+    return SafeArea(
+      child: DefaultTabController(
+        length: 4,
+        child: Scaffold(
+          body: TabBarView(
+            children: <Widget>[
+              CategoryListWidget(currentTab: 0,),
+              CategoryListWidget(currentTab: 1,),
+              CategoryListWidget(currentTab: 2,),
+              CategoryListWidget(currentTab: 3,),
+            ],
+          ),
+          appBar: TabBar(
 
-          tabs: <Widget>[
-            Tab(
-              text: "Today",
-            ),
-            Tab(
-              text: "Yesterday",
-            ),
-            Tab(
-              text: "Week",
-            ),
-            Tab(
-              text: "Month",
-            ),
-          ],
+            tabs: <Widget>[
+              Tab(
+                text: "Today",
+              ),
+              Tab(
+                text: "Yesterday",
+              ),
+              Tab(
+                text: "Week",
+              ),
+              Tab(
+                text: "Month",
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -59,15 +62,22 @@ class CategoryListWidget extends StatelessWidget {
     categoryList.sort((a, b) => a.chooseTimeToCompare(currentTab).compareTo(b.chooseTimeToCompare(currentTab)));
     categoryList = categoryList.reversed.toList();
 
-    return Container(
-      padding: EdgeInsets.only(top: 10),
-      child: ListView.builder(
-        itemCount: categoryList.length,
-        itemBuilder: (context, index) {
-          return _CategoryCard(category: categoryList[index], currentTab: currentTab,);
-        },
-      ),
-    );
+    if (categoryList != null) {
+      return Container(
+        padding: EdgeInsets.only(top: 10),
+        child: ListView.builder(
+          itemCount: categoryList.length,
+          itemBuilder: (context, index) {
+            return _CategoryCard(category: categoryList[index], currentTab: currentTab,);
+          },
+        ),
+      );
+    } else {
+      return Align(
+        alignment: Alignment.center,
+        child: Loader(),
+      );
+    }
   }
 }
 
