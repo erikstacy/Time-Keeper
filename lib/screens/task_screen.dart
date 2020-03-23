@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:time_keeper/services/models.dart';
 import 'package:time_keeper/shared/loading.dart';
@@ -15,11 +16,13 @@ class TaskScreen extends StatefulWidget {
 class _TaskScreenState extends State<TaskScreen> {
 
   Category ddCategory = Category(title: '');
+  DateTime endTime = DateTime.now();
+  Task task;
 
   @override
   Widget build(BuildContext context) {
 
-    Task task = Provider.of<Task>(context);
+    task = Provider.of<Task>(context);
     List<Category> categoryList = Provider.of<List<Category>>(context);
     categoryList.sort((a, b) => a.title.compareTo(b.title));
 
@@ -66,6 +69,35 @@ class _TaskScreenState extends State<TaskScreen> {
                     underline: Container(),
                   ),
                 ),
+                SizedBox(height: 20,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    'TIME',
+                    style: TextStyle(
+                      
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _selectTime(context);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                    child: Row(
+                      children: <Widget>[
+                        Text(
+                          _printFormattedTime(endTime),
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                        Icon(Icons.arrow_drop_down,),
+                      ],
+                    ),
+                  ),
+                ),
                 ButtonBar(
                   children: <Widget>[
                     FlatButton(
@@ -82,9 +114,9 @@ class _TaskScreenState extends State<TaskScreen> {
                       ),
                       onPressed: () {
                         if (task.categoryTitle != '' || task.categoryTitle != '..newUser') {
-                          task.finishTask(categoryList);
+                          task.finishTask(categoryList, endTime);
                         }
-                        Task(categoryTitle: ddCategory.title).addToDb();
+                        Task(categoryTitle: ddCategory.title).addToDb(endTime);
                         Navigator.pop(context);
                       },
                     ),
@@ -102,4 +134,19 @@ class _TaskScreenState extends State<TaskScreen> {
       );
     }
   }
+
+  void _selectTime(BuildContext context) async {
+    final TimeOfDay picked = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    DateTime newTime = new DateTime(endTime.year, endTime.month, endTime.day, picked.hour, picked.minute);
+
+    if (picked != null && task.startTime.compareTo(newTime) < 0) {
+      setState(() {
+        endTime = newTime;
+      });
+    }
+  }
+}
+
+String _printFormattedTime(DateTime thisTime) {
+  return DateFormat('hh:mm').format(thisTime);
 }

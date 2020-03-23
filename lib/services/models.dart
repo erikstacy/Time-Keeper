@@ -211,8 +211,8 @@ class Task {
     return "Start Time: " + DateFormat('hh:mm').format(this.startTime);
   }
 
-  void finishTask(List<Category> categoryList) {
-    endTime = DateTime.now();
+  void finishTask(List<Category> categoryList, DateTime endTime) {
+    this.endTime = endTime;
     totalTimeInMinutes = endTime.difference(startTime).inMinutes;
 
     for (Category category in categoryList) {
@@ -226,15 +226,15 @@ class Task {
     categoryTitle = '';
   }
 
-  void addToDb() {
+  void addToDb(DateTime startTime) {
     Global.taskDocument.upsert({
       'categoryTitle': categoryTitle,
-      'startTime': DateTime.now(),
+      'startTime': startTime,
     });
   }
 
   void endDay(List<Category> categoryList) {
-    finishTask(categoryList);
+    finishTask(categoryList, DateTime.now());
     for (Category category in categoryList) {
       category.endDay();
     }
