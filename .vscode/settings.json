@@ -1,5 +1,4 @@
 {
 	"dart.previewFlutterUiGuides": true,
-	"dart.previewFlutterUiGuidesCustomTracking": true,
-	"editor.tabSize": 8
+	"dart.previewFlutterUiGuidesCustomTracking": true
 }
