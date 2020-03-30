@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:time_keeper/screens/categories_screen.dart';
-import 'package:time_keeper/screens/current_activity_screen.dart';
-import 'package:time_keeper/screens/profile_screen.dart';
 import 'package:time_keeper/screens/task_screen.dart';
 import 'package:time_keeper/screens/totals_screen.dart';
-import 'package:time_keeper/services/models.dart';
 
 class MainScreen extends StatefulWidget {
 
@@ -80,6 +76,9 @@ class MainDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(FontAwesomeIcons.cubes),
             title: Text('Categories'),
+            onTap: () {
+              Navigator.pushNamed(context, CategoriesScreen.id);
+            },
           ),
           ListTile(
             leading: Icon(FontAwesomeIcons.signOutAlt),
@@ -97,7 +96,7 @@ class CurrentActivityCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Todo - Start a new task
+        Navigator.pushNamed(context, TaskScreen.id);
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
@@ -228,7 +227,7 @@ class NewDayCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Todo - Start a new day
+        Navigator.pushNamed(context, TaskScreen.id);
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
@@ -307,7 +306,7 @@ class TotalsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Todo - Go to totals screen
+        Navigator.pushNamed(context, TotalsScreen.id);
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 15, vertical: 8),

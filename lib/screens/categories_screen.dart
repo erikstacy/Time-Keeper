@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:time_keeper/screens/display_category_screen.dart';
 import 'package:time_keeper/services/globals.dart';
@@ -23,8 +24,15 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
     if (categoryList != null) {
       return Scaffold(
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          title: Text('Categories'),
+          backgroundColor: Colors.black,
+          centerTitle: true,
+        ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
+          backgroundColor: Colors.purpleAccent,
           onPressed: () {
             showDialog(
               context: context,
@@ -54,23 +62,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           },
         ),
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                PageTitle(title: "Categories",),
-                SizedBox(height: 10,),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: categoryList.length,
-                    itemBuilder: (context, index) {
-                      return _CategoryCard(category: categoryList[index],);
-                    },
-                  ),
-                ),
-              ],
-            ),
+          child: ListView.builder(
+            itemCount: categoryList.length,
+            itemBuilder: (context, index) {
+              return _CategoryCard(category: categoryList[index],);
+            },
           ),
         ),
       );
@@ -91,32 +87,28 @@ class _CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: GestureDetector(
-        onTap: () {
-          Global.changeCategory(category);
-          Navigator.pushNamed(context, DisplayCategoryScreen.id);
-        },
-        child: Card(
-          elevation: 3,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              SizedBox(height: 20,),                  
-              Container(
-                padding: EdgeInsets.only(left: 20),
-                child: Text(
-                  category.title,
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
+    return GestureDetector(
+      onTap: () {
+        Global.changeCategory(category);
+        Navigator.pushNamed(context, DisplayCategoryScreen.id);
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+        margin: EdgeInsets.only(bottom: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              category.title,
+              style: TextStyle(
+                fontSize: 18,
               ),
-              SizedBox(height: 20,),
-            ],
-          ),
+            ),
+            Icon(
+              FontAwesomeIcons.chevronRight,
+              size: 17,
+            ),
+          ],
         ),
       ),
     );

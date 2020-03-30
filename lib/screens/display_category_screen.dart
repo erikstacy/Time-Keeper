@@ -21,14 +21,18 @@ class _DisplayCategoryScreenState extends State<DisplayCategoryScreen> {
 
     if (category != null) {
       return Scaffold(
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          title: Text(category.title),
+          centerTitle: true,
+        ),
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                PageTitle(title: category.title,),
-                SizedBox(height: 30,),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -114,8 +118,11 @@ class TimeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 3,
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[900],
+        shape: BoxShape.circle,
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
