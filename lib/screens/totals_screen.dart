@@ -76,18 +76,15 @@ class CategoryListWidget extends StatelessWidget {
       return Container(
         padding: EdgeInsets.only(top: 10),
         child: ListView.builder(
-          itemCount: categoryList.length,
+          itemCount: 2,
           itemBuilder: (context, index) {
             if (index == 0) {
-              return TopCategories(categoryList: categoryList,);
+              return Expanded(child: TopCategories(categoryList: categoryList,));
+            } else if (index > 0) {
+              return Text('We made it');
+            } else {
+              return Text('wow');
             }
-
-            // Todo - This needs to be changed
-            if (index > 0) {
-              return CategoryCard(category: categoryList[index],);
-            }
-
-            return null;
           },
         ),
       );
@@ -102,7 +99,7 @@ class CategoryListWidget extends StatelessWidget {
 
 class TopCategories extends StatelessWidget {
 
-  List<Category> categoryList;
+  final List<Category> categoryList;
 
   TopCategories({ this.categoryList });
 
@@ -110,13 +107,6 @@ class TopCategories extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        SizedBox(height: 20,),
-        Text(
-          'Top Three',
-          style: TextStyle(
-            fontSize: 30,
-          ),
-        ),
         SizedBox(height: 20,),
         Row(
           children: <Widget>[
@@ -206,46 +196,21 @@ class TopCategories extends StatelessWidget {
   }
 }
 
-class CategoryCard extends StatelessWidget {
+/*
+class OtherCategories extends StatelessWidget {
 
-  Category category;
+  final List<Category> categoryList;
 
-  CategoryCard({ this.category });
+  OtherCategories({ this.categoryList });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Text(
-                '3:32',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.yellowAccent,
-                  fontSize: 40,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Text(
-                'Family',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 25,
-                  color: Colors.grey[400],
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.3,
-                ),
-              ),
-            ),
-          ],
-        ),
-        Divider(
-          color: Colors.grey[800],
-        ),
-      ],
+    return GridView.count(
+      crossAxisCount: 2,
+      children: List.generate(categoryList.length, (index) {
+        return Expanded(child: Text(categoryList[index].title));
+      }),
     );
   }
 }
+*/
