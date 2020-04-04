@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:time_keeper/screens/main_screen.dart';
 import 'package:time_keeper/screens/register_screen.dart';
 import 'package:time_keeper/services/auth.dart';
@@ -34,109 +35,124 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 15, top: 50,),
-              child: PageTitle(title: 'Time Keeper',),
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Login',
-                          style: TextStyle(
-                            fontSize: 25,
-                            letterSpacing: .6,
-                          ),
-                        ),
-                        SizedBox(height: 30,),
-                        Text(
-                          'Email',
-                        ),
-                        TextField(
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                            hintText: "email",
-                            hintStyle: TextStyle(
-                              fontSize: 12,
-                            ),
-                          ),
-                          onChanged: (value) {
-                            email = value;
-                          },
-                        ),
-                        SizedBox(height: 20,),
-                        Text(
-                          'Password',
-                        ),
-                        TextField(
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            hintText: "password",
-                            hintStyle: TextStyle(
-                              fontSize: 12,
-                            ),
-                          ),
-                          onChanged: (value) {
-                            password = value;
-                          },
-                        ),
-                        SizedBox(height: 20,),
-                      ],
-                    ),
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                Icon(
+                  FontAwesomeIcons.solidClock,
+                  color: Colors.purple,
+                  size: 80,
+                ),
+                SizedBox(height: 15,),
+                Text(
+                  'Time Keeper',
+                  style: TextStyle(
+                    color: Colors.purple,
+                    fontSize: 35,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-              SizedBox(height: 20,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  FlatButton(
+              ],
+            ),
+            Column(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 30),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[900],
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: TextField(
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Email",
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                      ),
+                    ),
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                    onChanged: (value) {
+                      email = value;
+                    },
+                  ),
+                ),
+                SizedBox(height: 20,),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 30),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[900],
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: TextField(
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Password",
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                      ),
+                    ),
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                    onChanged: (value) {
+                      password = value;
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: <Widget>[
+                RaisedButton(
+                  child: Text(
+                    'Login',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  color: Colors.purpleAccent,
+                  padding: EdgeInsets.symmetric(horizontal: 100, vertical: 13),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  onPressed: () async {
+                    var user = await _auth.emailLogin(email, password);
+                    if (user != null) {
+                      Navigator.pushReplacementNamed(context, MainScreen.id);
+                    }
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, RegisterScreen.id);
+                    },
                     child: Text(
                       'Register',
                       style: TextStyle(
                         fontSize: 16,
+                        color: Colors.white,
                       ),
                     ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, RegisterScreen.id);
-                    },
                   ),
-                  RaisedButton(
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Text(
-                        'LOGIN',
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    onPressed: () async {
-                      var user = await _auth.emailLogin(email, password);
-                      if (user != null) {
-                        Navigator.pushReplacementNamed(context, MainScreen.id);
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -22,110 +22,88 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 15, top: 50,),
-              child: PageTitle(title: 'Time Keeper',),
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Text(
+              'Enter your email',
             ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Register',
-                          style: TextStyle(
-                            fontSize: 25,
-                            letterSpacing: .6,
-                          ),
-                        ),
-                        SizedBox(height: 30,),
-                        Text(
-                          'Email',
-                        ),
-                        TextField(
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                            hintText: "email",
-                            hintStyle: TextStyle(
-                              fontSize: 12,
-                            ),
-                          ),
-                          onChanged: (value) {
-                            email = value;
-                          },
-                        ),
-                        SizedBox(height: 20,),
-                        Text(
-                          'Password',
-                        ),
-                        TextField(
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            hintText: "password",
-                            hintStyle: TextStyle(
-                              fontSize: 12,
-                            ),
-                          ),
-                          onChanged: (value) {
-                            password = value;
-                          },
-                        ),
-                        SizedBox(height: 20,),
-                      ],
-                    ),
+            Text(
+              'This will be the email you login with.',
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 30),
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: Colors.grey[900],
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: TextField(
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: "Email",
+                  hintStyle: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
                   ),
                 ),
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+                onChanged: (value) {
+                  email = value;
+                },
               ),
-              SizedBox(height: 20,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  FlatButton(
-                    child: Text(
-                      'Login',
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, LoginScreen.id);
-                    },
-                  ),
-                  RaisedButton(
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Text(
-                        'REGISTER',
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    onPressed: () async {
-                      var user = await _auth.emailRegister(email, password);
-                      if (user != null) {
-                        Navigator.pushReplacementNamed(context, MainScreen.id);
-                        Navigator.pushNamed(context, TaskScreen.id);
-                      }
-                    },
-                  ),
-                ],
+            ),
+            SizedBox(height: 20,),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 30),
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: Colors.grey[900],
+                borderRadius: BorderRadius.circular(30),
               ),
-            ],
-          ),
-        ],
+              child: TextField(
+                obscureText: true,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: "Password",
+                  hintStyle: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                  ),
+                ),
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+                onChanged: (value) {
+                  password = value;
+                },
+              ),
+            ),
+            RaisedButton(
+              child: Text(
+                'Login',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              color: Colors.purpleAccent,
+              padding: EdgeInsets.symmetric(horizontal: 100, vertical: 13),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+              onPressed: () async {
+                var user = await _auth.emailRegister(email, password);
+                if (user != null) {
+                  Navigator.pushReplacementNamed(context, MainScreen.id);
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
