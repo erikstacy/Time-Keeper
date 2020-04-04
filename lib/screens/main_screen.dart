@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:time_keeper/screens/categories_screen.dart';
+import 'package:time_keeper/screens/login_screen.dart';
 import 'package:time_keeper/screens/task_screen.dart';
 import 'package:time_keeper/screens/totals_screen.dart';
+import 'package:time_keeper/services/auth.dart';
 
 class MainScreen extends StatefulWidget {
 
@@ -83,6 +85,10 @@ class MainDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(FontAwesomeIcons.signOutAlt),
             title: Text('Sign Out'),
+            onTap: () {
+              AuthService().signOut();
+              Navigator.pushReplacementNamed(context, LoginScreen.id);
+            },
           ),
         ],
       ),

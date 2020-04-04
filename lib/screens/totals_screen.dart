@@ -75,17 +75,11 @@ class CategoryListWidget extends StatelessWidget {
     if (categoryList != null) {
       return Container(
         padding: EdgeInsets.only(top: 10),
-        child: ListView.builder(
-          itemCount: 2,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return Expanded(child: TopCategories(categoryList: categoryList,));
-            } else if (index > 0) {
-              return Text('We made it');
-            } else {
-              return Text('wow');
-            }
-          },
+        child: ListView(
+          children: <Widget>[
+            TopCategories(categoryList: categoryList,),
+            OtherCategories(categoryList: categoryList,),
+          ],
         ),
       );
     } else {
@@ -196,7 +190,6 @@ class TopCategories extends StatelessWidget {
   }
 }
 
-/*
 class OtherCategories extends StatelessWidget {
 
   final List<Category> categoryList;
@@ -205,12 +198,34 @@ class OtherCategories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 2,
-      children: List.generate(categoryList.length, (index) {
-        return Expanded(child: Text(categoryList[index].title));
+    return Column(
+      children: List.generate(20, (index) {
+        return Container(
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 45),
+          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: index % 2 == 1 ? Colors.grey[850] : Colors.grey[700],
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                'Coding',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              Text(
+                '1:30',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
+        );
       }),
     );
   }
 }
-*/
