@@ -16,8 +16,10 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
 
   AuthService _auth = AuthService();
-  String email = "";
-  String password = "";
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  bool isWarning;
 
   @override
   void initState() {
@@ -30,6 +32,16 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
     );
+
+    isWarning = false;
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    
+    super.dispose();
   }
 
   @override
@@ -64,25 +76,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   margin: EdgeInsets.symmetric(horizontal: 30),
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
-                    color: Colors.grey[900],
+                    color: isWarning? Colors.red : Colors.grey[900],
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: TextField(
+                    controller: emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: "Email",
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
-                      ),
+                      hintStyle: TextStyle(fontSize: 14, color: Colors.white,),
                     ),
                     style: TextStyle(
                       fontSize: 14,
                     ),
-                    onChanged: (value) {
-                      email = value;
-                    },
                   ),
                 ),
                 SizedBox(height: 20,),
@@ -90,25 +97,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   margin: EdgeInsets.symmetric(horizontal: 30),
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
-                    color: Colors.grey[900],
+                    color: isWarning? Colors.red : Colors.grey[900],
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: TextField(
+                    controller: passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: "Password",
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
-                      ),
+                      hintStyle: TextStyle(fontSize: 14, color: Colors.white,),
                     ),
                     style: TextStyle(
                       fontSize: 14,
                     ),
-                    onChanged: (value) {
-                      password = value;
-                    },
                   ),
                 ),
               ],
@@ -128,9 +130,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(30),
                   ),
                   onPressed: () async {
-                    var user = await _auth.emailLogin(email, password);
+                    var user = await _auth.emailLogin(emailController.text, passwordController.text);
                     if (user != null) {
                       Navigator.pushReplacementNamed(context, MainScreen.id);
+                    } else {
+                      setState(() {
+                        emailController.text = "";
+                        passwordController.text = "";
+                        isWarning = true;
+                      });
                     }
                   },
                 ),
