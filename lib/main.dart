@@ -6,6 +6,9 @@ import 'package:time_keeper/screens/current_activity_screen.dart';
 import 'package:time_keeper/screens/display_category_screen.dart';
 import 'package:time_keeper/screens/login_screen.dart';
 import 'package:time_keeper/screens/main_screen.dart';
+import 'package:time_keeper/screens/onboarding_categories_screen.dart';
+import 'package:time_keeper/screens/onboarding_info_screen.dart';
+import 'package:time_keeper/screens/onboarding_task_screen.dart';
 import 'package:time_keeper/screens/register_screen.dart';
 import 'package:time_keeper/screens/task_screen.dart';
 import 'package:time_keeper/screens/totals_screen.dart';
@@ -40,6 +43,9 @@ class MyApp extends StatelessWidget {
           CategoriesScreen.id: (context) => CategoriesScreen(),
           DisplayCategoryScreen.id: (context) => DisplayCategoryScreen(),
           TaskScreen.id: (context) => TaskScreen(),
+          OnboardingCategoriesScreen.id: (context) => OnboardingCategoriesScreen(),
+          OnboardingTaskScreen.id: (context) => OnboardingTaskScreen(),
+          OnboardingInfoScreen.id: (context) => OnboardingInfoScreen(),
         },
         theme: ThemeData.dark(),
       ),
