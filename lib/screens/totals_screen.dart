@@ -15,33 +15,43 @@ class _TotalsScreenState extends State<TotalsScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: DefaultTabController(
-        length: 4,
-        child: Scaffold(
-          body: TabBarView(
-            children: <Widget>[
-              CategoryListWidget(currentTab: 0,),
-              CategoryListWidget(currentTab: 1,),
-              CategoryListWidget(currentTab: 2,),
-              CategoryListWidget(currentTab: 3,),
-            ],
-          ),
-          appBar: TabBar(
-
-            tabs: <Widget>[
-              Tab(
-                text: "Today",
-              ),
-              Tab(
-                text: "Yesterday",
-              ),
-              Tab(
-                text: "Week",
-              ),
-              Tab(
-                text: "Month",
-              ),
-            ],
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          title: Text('Totals'),
+          backgroundColor: Colors.black,
+          elevation: 0,
+          centerTitle: true,
+        ),
+        body: DefaultTabController(
+          length: 4,
+          child: Scaffold(
+            backgroundColor: Colors.black,
+            body: TabBarView(
+              children: <Widget>[
+                CategoryListWidget(currentTab: 0,),
+                CategoryListWidget(currentTab: 1,),
+                CategoryListWidget(currentTab: 2,),
+                CategoryListWidget(currentTab: 3,),
+              ],
+            ),
+            appBar: TabBar(
+              indicatorColor: Colors.purpleAccent,
+              tabs: <Widget>[
+                Tab(
+                  text: "Today",
+                ),
+                Tab(
+                  text: "Yesterday",
+                ),
+                Tab(
+                  text: "Week",
+                ),
+                Tab(
+                  text: "Month",
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -65,11 +75,11 @@ class CategoryListWidget extends StatelessWidget {
     if (categoryList != null) {
       return Container(
         padding: EdgeInsets.only(top: 10),
-        child: ListView.builder(
-          itemCount: categoryList.length,
-          itemBuilder: (context, index) {
-            return _CategoryCard(category: categoryList[index], currentTab: currentTab,);
-          },
+        child: ListView(
+          children: <Widget>[
+            TopCategories(categoryList: categoryList,),
+            OtherCategories(categoryList: categoryList,),
+          ],
         ),
       );
     } else {
@@ -81,49 +91,141 @@ class CategoryListWidget extends StatelessWidget {
   }
 }
 
-class _CategoryCard extends StatelessWidget {
+class TopCategories extends StatelessWidget {
 
-  final Category category;
-  final int currentTab;
+  final List<Category> categoryList;
 
-  _CategoryCard({ this.category, this.currentTab });
+  TopCategories({ this.categoryList });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Card(
-        elevation: 3,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Column(
+      children: <Widget>[
+        SizedBox(height: 20,),
+        Row(
           children: <Widget>[
-            SizedBox(height: 20,),                  
-            Container(
-              padding: EdgeInsets.only(left: 30),
-              child: Text(
-                category.title,
-                style: TextStyle(
-                  fontSize: 21,
+            Expanded(
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      '3:32',
+                      style: TextStyle(
+                        color: Colors.yellowAccent,
+                        fontSize: 40,
+                      ),
+                    ),
+                    SizedBox(height: 5,),
+                    Text(
+                      'Family',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.grey[400],
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.3,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            SizedBox(height: 5,),
-            Container(
-              padding: EdgeInsets.only(left: 30),
-              child: Text(
-                "Total Time: " + category.chooseTimeToDisplay(currentTab),
-                style: TextStyle(
-                  fontSize: 15,
-                  letterSpacing: 0.25,
-                  color: Colors.grey[400],
-                ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    '3:32',
+                    style: TextStyle(
+                      color: Colors.yellowAccent,
+                      fontSize: 40,
+                    ),
+                  ),
+                  SizedBox(height: 5,),
+                  Text(
+                    'Family',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.grey[400],
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 20,),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    '3:32',
+                    style: TextStyle(
+                      color: Colors.yellowAccent,
+                      fontSize: 40,
+                    ),
+                  ),
+                  SizedBox(height: 5,),
+                  Text(
+                    'Family',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.grey[400],
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
-      ),
+        SizedBox(height: 20,),
+        Divider(
+          color: Colors.grey[800],
+        ),
+      ],
+    );
+  }
+}
+
+class OtherCategories extends StatelessWidget {
+
+  final List<Category> categoryList;
+
+  OtherCategories({ this.categoryList });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: List.generate(20, (index) {
+        return Container(
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 45),
+          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: index % 2 == 1 ? Colors.grey[850] : Colors.grey[700],
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                'Coding',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              Text(
+                '1:30',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 }

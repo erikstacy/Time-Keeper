@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:time_keeper/screens/onboarding_categories_screen.dart';
-import 'package:time_keeper/services/auth.dart';
+import 'package:time_keeper/screens/onboarding_task_screen.dart';
 
-class RegisterScreen extends StatefulWidget {
+class OnboardingCategoriesScreen extends StatefulWidget {
 
-  static String id = 'register_screen';
+  static String id = 'onboarding_categories_screen';
 
   @override
-  _RegisterScreenState createState() => _RegisterScreenState();
+  _OnboardingCategoriesScreenState createState() => _OnboardingCategoriesScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _OnboardingCategoriesScreenState extends State<OnboardingCategoriesScreen> {
 
-  AuthService _auth = AuthService();
-  String email = "";
-  String password = "";
+  String category1 = "";
+  String category2 = "";
+  String category3 = "";
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: <Widget>[
             SizedBox(height: 20,),
             Text(
-              'Enter your email',
+              'Create three categories',
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
@@ -33,7 +32,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             SizedBox(height: 5,),
             Text(
-              'This will be the email you login with.',
+              'You can add more later.',
               style: TextStyle(
                 fontSize: 12,
                 color: Colors.grey[500],
@@ -48,10 +47,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 borderRadius: BorderRadius.circular(30),
               ),
               child: TextField(
-                keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: "Email",
+                  hintText: "First Category",
                   hintStyle: TextStyle(
                     fontSize: 14,
                     color: Colors.white,
@@ -61,7 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   fontSize: 14,
                 ),
                 onChanged: (value) {
-                  email = value;
+                  category2 = value;
                 },
               ),
             ),
@@ -74,10 +72,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 borderRadius: BorderRadius.circular(30),
               ),
               child: TextField(
-                obscureText: true,
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: "Password",
+                  hintText: "Second Category",
                   hintStyle: TextStyle(
                     fontSize: 14,
                     color: Colors.white,
@@ -87,14 +84,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   fontSize: 14,
                 ),
                 onChanged: (value) {
-                  password = value;
+                  category3 = value;
+                },
+              ),
+            ),
+            SizedBox(height: 20,),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 30),
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: Colors.grey[900],
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: TextField(
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: "Third Category",
+                  hintStyle: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                  ),
+                ),
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+                onChanged: (value) {
+                  category1 = value;
                 },
               ),
             ),
             SizedBox(height: 20,),
             RaisedButton(
               child: Text(
-                'Register',
+                'Submit',
                 style: TextStyle(
                   fontSize: 16,
                 ),
@@ -111,7 +133,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Navigator.pushReplacementNamed(context, MainScreen.id);
                 }
                 */
-                Navigator.pushNamed(context, OnboardingCategoriesScreen.id);
+                Navigator.pushNamed(context, OnboardingTaskScreen.id);
               },
             ),
           ],

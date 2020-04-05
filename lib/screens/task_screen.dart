@@ -28,14 +28,25 @@ class _TaskScreenState extends State<TaskScreen> {
 
     if (task != null && categoryList != null) {
       return Scaffold(
+        backgroundColor: Colors.black,
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                PageTitle(title: 'New Task',),
-                SizedBox(height: 40,),
+                Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Text(
+                    'New Task',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20,),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
@@ -107,10 +118,15 @@ class _TaskScreenState extends State<TaskScreen> {
                       },
                     ),
                     SizedBox(width: 10,),
-                    RaisedButton(
+                    FlatButton(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                        child: Text('CONFIRM'),
+                        child: Text(
+                          'CONFIRM',
+                          style: TextStyle(
+                            color: Colors.purpleAccent,
+                          ),
+                        ),
                       ),
                       onPressed: () {
                         if (task.categoryTitle != '' || task.categoryTitle != '..newUser') {
