@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:time_keeper/screens/onboarding_categories_screen.dart';
 import 'package:time_keeper/services/auth.dart';
+import 'package:time_keeper/services/form_validation.dart';
+import 'package:time_keeper/shared/warning_alert.dart';
 
 class RegisterScreen extends StatefulWidget {
 
@@ -104,19 +106,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),
               ),
-              onPressed: () async {
-                /*
-                var user = await _auth.emailRegister(email, password);
-                if (user != null) {
-                  Navigator.pushReplacementNamed(context, MainScreen.id);
-                }
-                */
-                Navigator.pushNamed(context, OnboardingCategoriesScreen.id);
-              },
+              onPressed: () => registerButtonPress(context),
             ),
           ],
         ),
       ),
     );
   }
+
+  Future<void> registerButtonPress(context) async {
+    int formResult = await FormValidation.validateEmailRegistration(email, password);
+
+    if (formResult == 0) {
+      Navigator.pushNamed(context, OnboardingCategoriesScreen.id);
+    } else if (formResult == 1) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return WarningAlert(
+            title: 'Account already exists',
+            content: 'You can go back a screen or Login with this account information.',
+          );
+        },
+      );
+    } else if (formResult == 2) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return WarningAlert(
+            title: 'Email isn\'t formatted properly',
+            content: 'Check to make sure that you have a valid email address for your email.',
+          );
+        },
+      );
+    } else if (formResult == 3) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return WarningAlert(
+            title: 'Password isn\'t long enough',
+            content: 'Your password must be at least 6 characters long.',
+          );
+        },
+      );
+    }
+  }
 }
+

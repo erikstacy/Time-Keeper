@@ -3,7 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:time_keeper/screens/main_screen.dart';
 import 'package:time_keeper/screens/register_screen.dart';
 import 'package:time_keeper/services/auth.dart';
-import 'package:time_keeper/shared/page_title.dart';
+import 'package:time_keeper/services/form_validation.dart';
+import 'package:time_keeper/shared/warning_alert.dart';
 
 class LoginScreen extends StatefulWidget {
 
@@ -19,11 +20,11 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  bool isWarning;
-
   @override
   void initState() {
     super.initState();
+
+    _auth.signOut();
 
     _auth.getUser.then(
       (user) {
@@ -32,8 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
     );
-
-    isWarning = false;
   }
 
   @override
@@ -76,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   margin: EdgeInsets.symmetric(horizontal: 30),
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
-                    color: isWarning? Colors.red : Colors.grey[900],
+                    color: Colors.grey[900],
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: TextField(
@@ -97,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   margin: EdgeInsets.symmetric(horizontal: 30),
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
-                    color: isWarning? Colors.red : Colors.grey[900],
+                    color: Colors.grey[900],
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: TextField(
@@ -129,18 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  onPressed: () async {
-                    var user = await _auth.emailLogin(emailController.text, passwordController.text);
-                    if (user != null) {
-                      Navigator.pushReplacementNamed(context, MainScreen.id);
-                    } else {
-                      setState(() {
-                        emailController.text = "";
-                        passwordController.text = "";
-                        isWarning = true;
-                      });
-                    }
-                  },
+                  onPressed: () => loginButtonPress(context),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(15),
@@ -163,5 +151,55 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> loginButtonPress(context) async {
+    int formResult = await FormValidation.validateEmailLogin(emailController.text, passwordController.text);
+
+    if (formResult == 0) {
+      Navigator.pushReplacementNamed(context, MainScreen.id);
+    } else if (formResult == 1) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return WarningAlert(
+            title: 'Wrong account information',
+            content: 'The username or password may be wrong. If you don\'t have an account yet then tap on Register at the bottom of the screen.',
+          );
+        },
+      );
+      setState(() {
+        emailController.text = "";
+        passwordController.text = "";
+      });
+    } else if (formResult == 2) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return WarningAlert(
+            title: 'Email isn\'t formatted properly',
+            content: 'Check to make sure that you have a valid email address for your email.',
+          );
+        },
+      );
+      setState(() {
+        emailController.text = "";
+        passwordController.text = "";
+      });
+    } else if (formResult == 3) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return WarningAlert(
+            title: 'Password isn\'t long enough',
+            content: 'Your password must be at least 6 characters long.',
+          );
+        },
+      );
+      setState(() {
+        emailController.text = "";
+        passwordController.text = "";
+      });
+    }
   }
 }

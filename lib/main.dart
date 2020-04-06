@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:time_keeper/screens/categories_screen.dart';
-import 'package:time_keeper/screens/current_activity_screen.dart';
 import 'package:time_keeper/screens/display_category_screen.dart';
 import 'package:time_keeper/screens/login_screen.dart';
 import 'package:time_keeper/screens/main_screen.dart';
@@ -38,7 +37,6 @@ class MyApp extends StatelessWidget {
           RegisterScreen.id: (context) => RegisterScreen(),
           LoginScreen.id: (context) => LoginScreen(),
           MainScreen.id: (context) => MainScreen(),
-          CurrentActivityScreen.id: (context) => CurrentActivityScreen(),
           TotalsScreen.id: (context) => TotalsScreen(),
           CategoriesScreen.id: (context) => CategoriesScreen(),
           DisplayCategoryScreen.id: (context) => DisplayCategoryScreen(),
