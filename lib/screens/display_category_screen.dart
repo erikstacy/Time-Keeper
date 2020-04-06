@@ -3,7 +3,6 @@ import 'package:time_keeper/screens/main_screen.dart';
 import 'package:time_keeper/services/globals.dart';
 import 'package:time_keeper/services/models.dart';
 import 'package:time_keeper/shared/loading.dart';
-import 'package:time_keeper/shared/page_title.dart';
 
 class DisplayCategoryScreen extends StatefulWidget {
 

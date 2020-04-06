@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:time_keeper/screens/main_screen.dart';
 
 class OnboardingInfoScreen extends StatefulWidget {
@@ -25,19 +26,39 @@ class _OnboardingInfoScreenState extends State<OnboardingInfoScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 20,),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: Text(
-                'This app is designed to help you track how much time you\'re spending on certain tasks throughout the day. Create categories for everything that you would like to track throughout your day. You can get stats on how much time you\'ve spent per category as well! Thank you for using Time Keeper and I hope you enjoy it!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey[200],                
+            SizedBox(height: 40,),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 15,
+                  crossAxisSpacing: 15,
+                  children: <Widget>[
+                    GridCard(
+                      icon: FontAwesomeIcons.cubes,
+                      content: 'Categories should be created for every type of task you want to track.',
+                      color: Colors.greenAccent,
+                    ),
+                    GridCard(
+                      icon: FontAwesomeIcons.walking,
+                      content: 'Current Activity should always reflect what you\'re currently doing.',
+                      color: Colors.blue,
+                    ),
+                    GridCard(
+                      icon: FontAwesomeIcons.calendarDay,
+                      content: 'A new day should be created as soon as you wake up.',
+                      color: Colors.purpleAccent,
+                    ),
+                    GridCard(
+                      icon: FontAwesomeIcons.clock,
+                      content: 'Totals shows how much time has been spent on each category.',
+                      color: Colors.yellowAccent,
+                    ),
+                  ],
                 ),
               ),
             ),
-            SizedBox(height: 20,),
             RaisedButton(
                 child: Text(
                   'Open Time Keeper',
@@ -62,6 +83,46 @@ class _OnboardingInfoScreenState extends State<OnboardingInfoScreen> {
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class GridCard extends StatelessWidget {
+
+  final Color color;
+  final IconData icon;
+  final String content;
+
+  GridCard({ this.icon, this.content, this.color });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[900],
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            icon,
+            size: 50,
+            color: color,
+          ),
+          SizedBox(height: 10,),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Text(
+              content,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

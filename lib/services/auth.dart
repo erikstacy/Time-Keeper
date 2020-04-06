@@ -13,16 +13,25 @@ class AuthService {
   Stream<FirebaseUser> get user => _auth.onAuthStateChanged;
 
   Future<FirebaseUser> emailRegister(String email, String password) async {
-    FirebaseUser user = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-    updateUserData(user);
-    initializeUser(user);
-    return user;
+    try {
+      FirebaseUser user = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      updateUserData(user);
+      initializeUser(user);
+      return user;
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<FirebaseUser> emailLogin(String email, String password) async {
-    FirebaseUser user = await _auth.signInWithEmailAndPassword(email: email, password: password);
-    updateUserData(user);
-    return user;
+    try {
+      FirebaseUser user = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      updateUserData(user);
+      return user;
+    } catch (e) {
+      return null;
+    }
+    
   }
 
   Future<void> updateUserData(FirebaseUser user) {
