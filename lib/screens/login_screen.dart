@@ -24,8 +24,6 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
 
-    _auth.signOut();
-
     _auth.getUser.then(
       (user) {
         if (user != null) {

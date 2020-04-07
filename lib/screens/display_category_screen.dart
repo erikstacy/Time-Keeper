@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:time_keeper/screens/categories_screen.dart';
 import 'package:time_keeper/screens/main_screen.dart';
 import 'package:time_keeper/services/globals.dart';
 import 'package:time_keeper/services/models.dart';
@@ -13,17 +14,23 @@ class DisplayCategoryScreen extends StatefulWidget {
 }
 
 class _DisplayCategoryScreenState extends State<DisplayCategoryScreen> {
+
+  String title = "";
+
   @override
   Widget build(BuildContext context) {
 
     Category category = Global.currentCategory;
+    if (title == "") {
+      title = category.title;
+    }
 
     if (category != null) {
       return Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
           backgroundColor: Colors.black,
-          title: Text(category.title),
+          title: Text(title),
           centerTitle: true,
         ),
         body: SafeArea(
@@ -72,7 +79,10 @@ class _DisplayCategoryScreenState extends State<DisplayCategoryScreen> {
                                   FlatButton(
                                     child: Text('CONFIRM'),
                                     onPressed: () {
-                                      // Todo - Implement confirmation
+                                      category.changeTitle(newTitle);
+                                      setState(() {
+                                        title = newTitle;
+                                      });
                                       Navigator.pop(context);
                                     },
                                   ),
@@ -105,7 +115,7 @@ class _DisplayCategoryScreenState extends State<DisplayCategoryScreen> {
                                     child: Text('YES'),
                                     onPressed: () {
                                       category.delete();
-                                      Navigator.popUntil(context, ModalRoute.withName(MainScreen.id));
+                                      Navigator.popUntil(context, ModalRoute.withName(CategoriesScreen.id));
                                     },
                                   ),
                                   FlatButton(
