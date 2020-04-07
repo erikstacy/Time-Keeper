@@ -90,7 +90,7 @@ class Category {
     });
   }
 
-  void initializeCategory(String title) {
+  Future<void> initializeCategory(String title) async {
     this.title = title;
     todayTime = 0;
     yesterdayTime = 0;

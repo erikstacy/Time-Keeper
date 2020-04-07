@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:time_keeper/screens/onboarding_info_screen.dart';
 import 'package:time_keeper/services/models.dart';
 
@@ -12,23 +13,21 @@ class OnboardingTaskScreen extends StatefulWidget {
 
 class _OnboardingTaskScreenState extends State<OnboardingTaskScreen> {
 
-  List<Category> categoryList = [
-    Category(title: 'Coding'),
-    Category(title: 'School'),
-    Category(title: 'Sleep'),
-  ];
+  Category ddCategory = Category(title: '');
 
-  Category currentCategory;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-
-    currentCategory = categoryList[0];
   }
 
   @override
   Widget build(BuildContext context) {
+
+    List<Category> categoryList = Provider.of<List<Category>>(context);
+    categoryList.sort((a, b) => a.title.compareTo(b.title));
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -68,7 +67,7 @@ class _OnboardingTaskScreenState extends State<OnboardingTaskScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: DropdownButton<Category>(
-                      value: currentCategory,
+                      value: ddCategory.title == '' ? null : ddCategory,
                       hint: Text('Select'),
                       items: categoryList.map<DropdownMenuItem<Category>>((Category category) {
                         return DropdownMenuItem<Category>(
@@ -84,7 +83,7 @@ class _OnboardingTaskScreenState extends State<OnboardingTaskScreen> {
                       }).toList(),
                       onChanged: (Category newCategory) {
                         setState(() {
-                          currentCategory = newCategory;
+                          ddCategory = newCategory;
                         });
                       },
                       underline: Container(),
@@ -106,13 +105,20 @@ class _OnboardingTaskScreenState extends State<OnboardingTaskScreen> {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 onPressed: () async {
-                  /*
-                  var user = await _auth.emailRegister(email, password);
-                  if (user != null) {
-                    Navigator.pushReplacementNamed(context, MainScreen.id);
-                  }
-                  */
+                  setState(() {
+                    isLoading = true;
+                  });
+
+                  Task firstTask = new Task();
+                  firstTask.categoryTitle = ddCategory.title;
+
+                  firstTask.addToDb(DateTime.now());
+
                   Navigator.pushNamed(context, OnboardingInfoScreen.id);
+
+                  setState(() {
+                    isLoading = false;
+                  });
                 },
               ),
             ],
