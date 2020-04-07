@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:time_keeper/screens/categories_screen.dart';
 import 'package:time_keeper/screens/onboarding_task_screen.dart';
+import 'package:time_keeper/services/globals.dart';
+import 'package:time_keeper/services/models.dart';
+import 'package:time_keeper/shared/loading.dart';
 
 class OnboardingCategoriesScreen extends StatefulWidget {
 
@@ -15,11 +20,13 @@ class _OnboardingCategoriesScreenState extends State<OnboardingCategoriesScreen>
   String category2 = "";
   String category3 = "";
 
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: SafeArea(
+      body: isLoading ? Center(child: Loader()) : SafeArea(
         child: Column(
           children: <Widget>[
             SizedBox(height: 20,),
@@ -127,12 +134,27 @@ class _OnboardingCategoriesScreenState extends State<OnboardingCategoriesScreen>
                 borderRadius: BorderRadius.circular(30),
               ),
               onPressed: () async {
-                /*
-                var user = await _auth.emailRegister(email, password);
-                if (user != null) {
-                  Navigator.pushReplacementNamed(context, MainScreen.id);
-                }
-                */
+                setState(() {
+                  isLoading = true;
+                });
+
+                List<Category> categoryList = Provider.of<List<Category>>(context);
+
+                categoryList[0].delete();
+
+                Category newCategory1 = Category();
+                newCategory1.initializeCategory(category1);
+
+                Category newCategory2 = Category();
+                newCategory2.initializeCategory(category2);
+
+                Category newCategory3 = Category();
+                newCategory3.initializeCategory(category3);
+
+                categoryList.add(newCategory1);
+                categoryList.add(newCategory2);
+                categoryList.add(newCategory3);
+
                 Navigator.pushNamed(context, OnboardingTaskScreen.id);
               },
             ),

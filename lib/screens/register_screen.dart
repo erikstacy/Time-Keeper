@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:time_keeper/screens/onboarding_categories_screen.dart';
 import 'package:time_keeper/services/auth.dart';
 import 'package:time_keeper/services/form_validation.dart';
+import 'package:time_keeper/shared/loading.dart';
 import 'package:time_keeper/shared/warning_alert.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -18,11 +19,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String email = "";
   String password = "";
 
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: SafeArea(
+      body: isLoading == true ? Center(child: Loader()) : SafeArea(
         child: Column(
           children: <Widget>[
             SizedBox(height: 20,),
@@ -115,6 +118,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> registerButtonPress(context) async {
+    setState(() {
+      isLoading = true;
+    });
     int formResult = await FormValidation.validateEmailRegistration(email, password);
 
     if (formResult == 0) {
@@ -150,6 +156,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         },
       );
     }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 }
 
