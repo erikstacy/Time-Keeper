@@ -128,7 +128,7 @@ class _TaskScreenState extends State<TaskScreen> {
                         ),
                       ),
                       onPressed: () {
-                        if (task.categoryTitle != '' || task.categoryTitle != '..newUser') {
+                        if (task.categoryTitle != '') {
                           task.finishTask(categoryList, endTime);
                         }
                         Task(categoryTitle: ddCategory.title).addToDb(endTime);

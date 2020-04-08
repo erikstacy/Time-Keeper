@@ -246,7 +246,7 @@ class Task {
     });
   }
 
-  void endDay(List<Category> categoryList) {
+  Future<void> endDay(List<Category> categoryList) async {
     finishTask(categoryList, DateTime.now());
     for (Category category in categoryList) {
       category.endDay();

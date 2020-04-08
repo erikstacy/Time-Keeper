@@ -20,6 +20,13 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    List<Category> categoryList = Provider.of<List<Category>>(context);
+    categoryList.sort((a, b) => a.chooseTimeToCompare(0).compareTo(b.chooseTimeToCompare(0)));
+    categoryList = categoryList.reversed.toList();
+
+    Task task = Provider.of<Task>(context);
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
@@ -33,9 +40,9 @@ class _MainScreenState extends State<MainScreen> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            CurrentActivityCard(),
-            NewDayCard(),
-            TotalsCard(),
+            CurrentActivityCard(task: task,),
+            NewDayCard(categoryList: categoryList, task: task,),
+            TotalsCard(categoryList: categoryList,),
           ],
         ),
       ),
@@ -100,11 +107,12 @@ class MainDrawer extends StatelessWidget {
 
 class CurrentActivityCard extends StatelessWidget {
 
+  final Task task;
+
+  CurrentActivityCard({ this.task });
+
   @override
   Widget build(BuildContext context) {
-
-    Task task = Provider.of<Task>(context);
-
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, TaskScreen.id);
@@ -236,10 +244,16 @@ class CurrentActivityCard extends StatelessWidget {
 
 class NewDayCard extends StatelessWidget {
 
+  final Task task;
+  final List<Category> categoryList;
+
+  NewDayCard({ this.task, this.categoryList });
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        await task.endDay(categoryList);
         Navigator.pushNamed(context, TaskScreen.id);
       },
       child: Container(
@@ -315,13 +329,12 @@ class NewDayCard extends StatelessWidget {
 
 class TotalsCard extends StatelessWidget {
 
+  final List<Category> categoryList;
+
+  TotalsCard({ this.categoryList });
+
   @override
   Widget build(BuildContext context) {
-
-    List<Category> categoryList = Provider.of<List<Category>>(context);
-    categoryList.sort((a, b) => a.chooseTimeToCompare(0).compareTo(b.chooseTimeToCompare(0)));
-    categoryList = categoryList.reversed.toList();
-
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, TotalsScreen.id);
