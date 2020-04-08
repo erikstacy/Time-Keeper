@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:time_keeper/services/globals.dart';
 import 'db.dart';
 
@@ -80,8 +82,8 @@ class Category {
     });
   }
 
-  void updateDb() {
-    doc.upsert({
+  Future<void> updateDb() async {
+    await doc.upsert({
       "todayTime": todayTime,
       "yesterdayTime": yesterdayTime,
       "weekTime": weekTime,
@@ -239,7 +241,7 @@ class Task {
     return hours.toString() + ":" + (minutes < 10 ? ("0" + minutes.toString()) : minutes.toString());
   }
 
-  void finishTask(List<Category> categoryList, DateTime endTime) {
+  Future<List<Category>> finishTask(List<Category> categoryList, DateTime endTime) async {
     this.endTime = endTime;
     totalTimeInMinutes = endTime.difference(startTime).inMinutes;
 
@@ -248,13 +250,16 @@ class Task {
         category.todayTime += this.totalTimeInMinutes;
         category.weekTime += this.totalTimeInMinutes;
         category.monthTime += this.totalTimeInMinutes;
-        category.updateDb();
+        await category.updateDb();
       }
     }
-    categoryTitle = '';
+    this.categoryTitle = '';
+    await addToDb(DateTime.now());
+
+    return categoryList;
   }
 
-  void addToDb(DateTime startTime) {
+  Future<void> addToDb(DateTime startTime) async {
     Global.taskDocument.upsert({
       'categoryTitle': categoryTitle,
       'startTime': startTime,
@@ -262,8 +267,9 @@ class Task {
   }
 
   Future<void> endDay(List<Category> categoryList, User user) async {
-    finishTask(categoryList, DateTime.now());
-    for (Category category in categoryList) {
+    List<Category> newCategoryList = await finishTask(categoryList, DateTime.now());
+
+    for (Category category in newCategoryList) {
       category.endDay(user);
     }
     user.updateLastDay();
