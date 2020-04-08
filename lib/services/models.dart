@@ -211,6 +211,19 @@ class Task {
     return "Start Time: " + DateFormat('hh:mm').format(this.startTime);
   }
 
+  String printRawStartTime() {
+    return DateFormat('hh:mm').format(this.startTime);
+  }
+
+  String printRawTotal() {
+    int tempTotal = DateTime.now().difference(startTime).inMinutes;
+
+    int minutes = tempTotal % 60;
+    int hours = tempTotal ~/ 60;
+
+    return hours.toString() + ":" + (minutes < 10 ? ("0" + minutes.toString()) : minutes.toString());
+  }
+
   void finishTask(List<Category> categoryList, DateTime endTime) {
     this.endTime = endTime;
     totalTimeInMinutes = endTime.difference(startTime).inMinutes;

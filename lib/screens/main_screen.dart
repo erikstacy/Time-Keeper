@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:time_keeper/screens/categories_screen.dart';
 import 'package:time_keeper/screens/login_screen.dart';
 import 'package:time_keeper/screens/task_screen.dart';
 import 'package:time_keeper/screens/totals_screen.dart';
 import 'package:time_keeper/services/auth.dart';
+import 'package:time_keeper/services/models.dart';
 
 class MainScreen extends StatefulWidget {
 
@@ -100,6 +102,9 @@ class CurrentActivityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    Task task = Provider.of<Task>(context);
+
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, TaskScreen.id);
@@ -150,7 +155,8 @@ class CurrentActivityCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            '3:56',
+                            task.printRawTotal(),
+                            textAlign: TextAlign.start,
                             style: TextStyle(
                               fontSize: 40,
                               color: Colors.blue,
@@ -158,6 +164,7 @@ class CurrentActivityCard extends StatelessWidget {
                           ),
                           Text(
                             'TOTAL TIME',
+                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),
@@ -182,7 +189,7 @@ class CurrentActivityCard extends StatelessWidget {
                             ),
                             Expanded(
                               child: Text(
-                                'Coding',
+                                task.categoryTitle,
                                 style: TextStyle(
                                   fontSize: 16,
                                 ),
@@ -206,7 +213,7 @@ class CurrentActivityCard extends StatelessWidget {
                             ),
                             Expanded(
                               child: Text(
-                                '1:28',
+                                task.printRawStartTime(),
                                 style: TextStyle(
                                   fontSize: 16,
                                 ),
@@ -310,6 +317,11 @@ class TotalsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    List<Category> categoryList = Provider.of<List<Category>>(context);
+    categoryList.sort((a, b) => a.chooseTimeToCompare(0).compareTo(b.chooseTimeToCompare(0)));
+    categoryList = categoryList.reversed.toList();
+
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, TotalsScreen.id);
@@ -372,7 +384,7 @@ class TotalsCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              'Coding',
+                              categoryList[0].title,
                               style: TextStyle(
                                 fontSize: 15,
                                 color: Colors.grey[400],
@@ -382,7 +394,7 @@ class TotalsCard extends StatelessWidget {
                             ),
                             SizedBox(height: 5,),
                             Text(
-                              '4:00',
+                              categoryList[0].displayTodayTime(),
                               style: TextStyle(
                                 color: Colors.yellowAccent,
                                 fontSize: 30,
@@ -396,7 +408,7 @@ class TotalsCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              'Family',
+                              categoryList[1].title,
                               style: TextStyle(
                                 fontSize: 15,
                                 color: Colors.grey[400],
@@ -406,7 +418,7 @@ class TotalsCard extends StatelessWidget {
                             ),
                             SizedBox(height: 5,),
                             Text(
-                              '3:32',
+                              categoryList[1].displayTodayTime(),
                               style: TextStyle(
                                 color: Colors.yellowAccent,
                                 fontSize: 30,
@@ -420,7 +432,7 @@ class TotalsCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              'Entertainment',
+                              categoryList[2].title,
                               style: TextStyle(
                                 fontSize: 15,
                                 color: Colors.grey[400],
@@ -430,7 +442,7 @@ class TotalsCard extends StatelessWidget {
                             ),
                             SizedBox(height: 5,),
                             Text(
-                              '2:48',
+                              categoryList[2].displayTodayTime(),
                               style: TextStyle(
                                 color: Colors.yellowAccent,
                                 fontSize: 30,
