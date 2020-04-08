@@ -77,8 +77,8 @@ class CategoryListWidget extends StatelessWidget {
         padding: EdgeInsets.only(top: 10),
         child: ListView(
           children: <Widget>[
-            TopCategories(categoryList: categoryList,),
-            OtherCategories(categoryList: categoryList,),
+            TopCategories(categoryList: categoryList, currentTab: currentTab,),
+            OtherCategories(categoryList: categoryList, currentTab: currentTab,),
           ],
         ),
       );
@@ -94,8 +94,9 @@ class CategoryListWidget extends StatelessWidget {
 class TopCategories extends StatelessWidget {
 
   final List<Category> categoryList;
+  final int currentTab;
 
-  TopCategories({ this.categoryList });
+  TopCategories({ this.categoryList, this.currentTab });
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +112,7 @@ class TopCategories extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      '3:32',
+                      categoryList[0].chooseTimeToDisplay(currentTab),
                       style: TextStyle(
                         color: Colors.yellowAccent,
                         fontSize: 40,
@@ -119,7 +120,8 @@ class TopCategories extends StatelessWidget {
                     ),
                     SizedBox(height: 5,),
                     Text(
-                      'Family',
+                      categoryList[0].title,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.grey[400],
@@ -136,7 +138,7 @@ class TopCategories extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    '3:32',
+                    categoryList[1].chooseTimeToDisplay(currentTab),
                     style: TextStyle(
                       color: Colors.yellowAccent,
                       fontSize: 40,
@@ -144,7 +146,8 @@ class TopCategories extends StatelessWidget {
                   ),
                   SizedBox(height: 5,),
                   Text(
-                    'Family',
+                    categoryList[1].title,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[400],
@@ -160,7 +163,7 @@ class TopCategories extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    '3:32',
+                    categoryList[2].chooseTimeToDisplay(currentTab),
                     style: TextStyle(
                       color: Colors.yellowAccent,
                       fontSize: 40,
@@ -168,7 +171,8 @@ class TopCategories extends StatelessWidget {
                   ),
                   SizedBox(height: 5,),
                   Text(
-                    'Family',
+                    categoryList[2].title,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[400],
@@ -193,13 +197,14 @@ class TopCategories extends StatelessWidget {
 class OtherCategories extends StatelessWidget {
 
   final List<Category> categoryList;
+  final int currentTab;
 
-  OtherCategories({ this.categoryList });
+  OtherCategories({ this.categoryList, this.currentTab });
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: List.generate(20, (index) {
+      children: List.generate(categoryList.length - 3, (index) {
         return Container(
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 45),
           margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -211,13 +216,13 @@ class OtherCategories extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                'Coding',
+                categoryList[index + 3].title,
                 style: TextStyle(
                   fontSize: 18,
                 ),
               ),
               Text(
-                '1:30',
+                categoryList[index + 3].chooseTimeToDisplay(currentTab),
                 style: TextStyle(
                   fontSize: 18,
                 ),
