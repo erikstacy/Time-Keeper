@@ -9,11 +9,13 @@ class User {
   String uid;
   Document<User> doc;
   String email;
+  DateTime lastDay;
 
   User({
     this.uid,
     this.doc,
     this.email,
+    this.lastDay,
   });
 
   factory User.fromFirestore(DocumentSnapshot doc) {
@@ -23,7 +25,14 @@ class User {
       uid: data['uid'],
       doc: Document<User>(path: doc.reference.path),
       email: data['email'],
+      lastDay: DateTime.fromMillisecondsSinceEpoch(data['lastDay'].seconds * 1000),
     );
+  }
+
+  void updateLastDay() {
+    doc.upsert({
+      'lastDay': DateTime.now(),
+    },);
   }
 }
 
@@ -162,15 +171,21 @@ class Category {
     return time;
   }
 
-  void endDay() {
+  void endDay(User user) {
     this.yesterdayTime = this.todayTime;
     this.todayTime = 0;
 
-    if (DateTime.now().weekday == 1) {
+    DateTime currentTime = DateTime.now();
+
+    DateTime tempDay = user.lastDay;
+    tempDay = tempDay.add(new Duration(days: (8 - tempDay.weekday)));
+    tempDay = DateTime(tempDay.year, tempDay.month, tempDay.day, 0, 0, 1);
+
+    if (currentTime.isAfter(tempDay)) {
       this.weekTime = 0;
     }
 
-    if (DateTime.now().day == 1) {
+    if (user.lastDay.month != currentTime.month) {
       this.monthTime = 0;
     }
 
@@ -246,11 +261,12 @@ class Task {
     });
   }
 
-  Future<void> endDay(List<Category> categoryList) async {
+  Future<void> endDay(List<Category> categoryList, User user) async {
     finishTask(categoryList, DateTime.now());
     for (Category category in categoryList) {
-      category.endDay();
+      category.endDay(user);
     }
+    user.updateLastDay();
   }
 
 }

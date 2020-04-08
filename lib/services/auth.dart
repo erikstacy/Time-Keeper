@@ -49,6 +49,7 @@ class AuthService {
     userRef.setData({
       'categoryTitle': '..newUser',
       'startTime': DateTime.utc(1960, 1, 1, 12, 0, 0),
+      'lastDay': DateTime.now(),
     }, merge: true);
 
     _db.collection('users').document(user.uid).collection('categories').add({

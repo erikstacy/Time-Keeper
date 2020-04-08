@@ -26,6 +26,7 @@ class _MainScreenState extends State<MainScreen> {
     categoryList = categoryList.reversed.toList();
 
     Task task = Provider.of<Task>(context);
+    User user = Provider.of<User>(context);
 
     return SafeArea(
       child: Scaffold(
@@ -41,7 +42,7 @@ class _MainScreenState extends State<MainScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             CurrentActivityCard(task: task,),
-            NewDayCard(categoryList: categoryList, task: task,),
+            NewDayCard(categoryList: categoryList, task: task, user: user,),
             TotalsCard(categoryList: categoryList,),
           ],
         ),
@@ -246,14 +247,15 @@ class NewDayCard extends StatelessWidget {
 
   final Task task;
   final List<Category> categoryList;
+  final User user;
 
-  NewDayCard({ this.task, this.categoryList });
+  NewDayCard({ this.task, this.categoryList, this.user });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        await task.endDay(categoryList);
+        await task.endDay(categoryList, user);
         Navigator.pushNamed(context, TaskScreen.id);
       },
       child: Container(
