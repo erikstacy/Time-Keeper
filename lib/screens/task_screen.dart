@@ -18,16 +18,19 @@ class _TaskScreenState extends State<TaskScreen> {
   Category ddCategory = Category(title: '');
   DateTime endTime = DateTime.now();
   Task task;
+  List<Category> categoryList;
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
 
     task = Provider.of<Task>(context);
-    List<Category> categoryList = Provider.of<List<Category>>(context);
+    categoryList = Provider.of<List<Category>>(context);
     categoryList.sort((a, b) => a.title.compareTo(b.title));
 
     if (task != null && categoryList != null) {
-      return Scaffold(
+      return isLoading == true ? Center(child: Loader(),) : Scaffold(
         backgroundColor: Colors.black,
         body: SafeArea(
           child: Padding(
@@ -129,6 +132,10 @@ class _TaskScreenState extends State<TaskScreen> {
                         ),
                       ),
                       onPressed: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+
                         if (task.categoryTitle != '') {
                           await task.finishTask(categoryList, endTime);
                         }
