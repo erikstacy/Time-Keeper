@@ -128,9 +128,9 @@ class _TaskScreenState extends State<TaskScreen> {
                           ),
                         ),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (task.categoryTitle != '') {
-                          task.finishTask(categoryList, endTime);
+                          await task.finishTask(categoryList, endTime);
                         }
                         Task(categoryTitle: ddCategory.title).addToDb(endTime);
                         Navigator.pop(context);
