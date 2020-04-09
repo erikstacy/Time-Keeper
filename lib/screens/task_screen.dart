@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:time_keeper/services/models.dart';
 import 'package:time_keeper/shared/loading.dart';
+import 'package:time_keeper/shared/warning_alert.dart';
 
 class TaskScreen extends StatefulWidget {
 
@@ -158,6 +159,16 @@ class _TaskScreenState extends State<TaskScreen> {
       setState(() {
         endTime = newTime;
       });
+    } else if (task.startTime.compareTo(newTime) > 0) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return WarningAlert(
+            title: 'Selected time is invalid',
+            content: 'The time you selected was BEFORE that task\'s start time, and that is invalid. Pick a different time.',
+          );
+        },
+      );
     }
   }
 }
