@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:time_keeper/screens/categories_screen.dart';
 import 'package:time_keeper/screens/login_screen.dart';
 import 'package:time_keeper/screens/task_screen.dart';
@@ -18,6 +19,10 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
 
+  RefreshController refreshController = RefreshController(initialRefresh: false);
+
+  Task task;
+
   @override
   Widget build(BuildContext context) {
 
@@ -25,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
     categoryList.sort((a, b) => a.chooseTimeToCompare(0).compareTo(b.chooseTimeToCompare(0)));
     categoryList = categoryList.reversed.toList();
 
-    Task task = Provider.of<Task>(context);
+    task = Provider.of<Task>(context);
     User user = Provider.of<User>(context);
 
     return SafeArea(
@@ -38,16 +43,35 @@ class _MainScreenState extends State<MainScreen> {
           centerTitle: true,
         ),
         drawer: MainDrawer(),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            CurrentActivityCard(task: task,),
-            NewDayCard(categoryList: categoryList, task: task, user: user,),
-            TotalsCard(categoryList: categoryList,),
-          ],
+        body: SmartRefresher(
+          enablePullDown: true,
+          enablePullUp: true,
+          header: WaterDropHeader(),
+          controller: refreshController,
+          onRefresh: _onRefresh,
+          onLoading: _onLoading,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              CurrentActivityCard(task: task,),
+              NewDayCard(categoryList: categoryList, task: task, user: user,),
+              TotalsCard(categoryList: categoryList,),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void _onRefresh() {
+    setState(() {
+      task = Provider.of<Task>(context);
+    });
+    refreshController.refreshCompleted();
+  }
+
+  void _onLoading() {
+    refreshController.loadComplete();
   }
 }
 

@@ -24,6 +24,8 @@ dependencies:
   intl: ^0.16.1
   font_awesome_flutter: 8.4.0
 
+  pull_to_refresh: ^1.5.8
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
