@@ -446,78 +446,9 @@ class TotalsCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              categoryList[0].title,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.grey[400],
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 0.3,
-                              ),
-                            ),
-                            SizedBox(height: 5,),
-                            Text(
-                              categoryList[0].displayTodayTime(),
-                              style: TextStyle(
-                                color: Colors.yellowAccent,
-                                fontSize: 30,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              categoryList[1].title,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.grey[400],
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 0.3,
-                              ),
-                            ),
-                            SizedBox(height: 5,),
-                            Text(
-                              categoryList[1].displayTodayTime(),
-                              style: TextStyle(
-                                color: Colors.yellowAccent,
-                                fontSize: 30,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              categoryList[2].title,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.grey[400],
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 0.3,
-                              ),
-                            ),
-                            SizedBox(height: 5,),
-                            Text(
-                              categoryList[2].displayTodayTime(),
-                              style: TextStyle(
-                                color: Colors.yellowAccent,
-                                fontSize: 30,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      if (categoryList.length > 0) SingleTotalCategory(category: categoryList[0]),
+                      if (categoryList.length > 1) SingleTotalCategory(category: categoryList[1]),
+                      if (categoryList.length > 2) SingleTotalCategory(category: categoryList[2]),
                     ],
                   ),
                 ],
@@ -525,6 +456,41 @@ class TotalsCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class SingleTotalCategory extends StatelessWidget {
+
+  final Category category;
+
+  SingleTotalCategory({ this.category });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            category.title,
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.grey[400],
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.3,
+            ),
+          ),
+          SizedBox(height: 5,),
+          Text(
+            category.displayTodayTime(),
+            style: TextStyle(
+              color: Colors.yellowAccent,
+              fontSize: 30,
+            ),
+          ),
+        ],
       ),
     );
   }
