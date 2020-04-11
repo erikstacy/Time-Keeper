@@ -279,6 +279,8 @@ class NewDayCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
+        bool confirmed = false;
+
         await showDialog(
           context: context,
           builder: (context) {
@@ -294,6 +296,7 @@ class NewDayCard extends StatelessWidget {
                 FlatButton(
                   child: Text('YES'),
                   onPressed: () async {
+                    confirmed = true;
                     Navigator.pop(context);
                     await task.endDay(categoryList, user);
                   },
@@ -308,7 +311,9 @@ class NewDayCard extends StatelessWidget {
             );
           }
         );
-        Navigator.pushNamed(context, TaskScreen.id);
+        if (confirmed == true) {
+          Navigator.pushNamed(context, TaskScreen.id);
+        }        
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
