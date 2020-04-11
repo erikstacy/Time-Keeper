@@ -255,7 +255,35 @@ class NewDayCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        await task.endDay(categoryList, user);
+        await showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Are you sure?'),
+              content: Text(
+                'Only accept if you\'re starting a new day.',
+                style: TextStyle(
+                  color: Colors.grey[400],
+                ),
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('YES'),
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    await task.endDay(categoryList, user);
+                  },
+                ),
+                FlatButton(
+                  child: Text('NO'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          }
+        );
         Navigator.pushNamed(context, TaskScreen.id);
       },
       child: Container(
