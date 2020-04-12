@@ -45,7 +45,6 @@ class _MainScreenState extends State<MainScreen> {
         drawer: MainDrawer(),
         body: SmartRefresher(
           enablePullDown: true,
-          enablePullUp: true,
           header: WaterDropHeader(),
           controller: refreshController,
           onRefresh: _onRefresh,
@@ -152,22 +151,20 @@ class CurrentActivityCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
-                color: Colors.grey[700],
+                color: Colors.blue,
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
               ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Icon(
-                    FontAwesomeIcons.walking,
-                    color: Colors.blue,
-                    size: 18,
-                  ),
-                  SizedBox(width: 10,),
+                  SizedBox(width: 15,),
                   Text(
                     'Current Activity',
                     style: TextStyle(
                       fontSize: 15,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
@@ -325,22 +322,19 @@ class NewDayCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
-                color: Colors.grey[700],
+                color: Colors.purpleAccent,
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Icon(
-                    FontAwesomeIcons.calendarDay,
-                    color: Colors.purpleAccent,
-                    size: 18,
-                  ),
-                  SizedBox(width: 10,),
+                  SizedBox(width: 15,),
                   Text(
                     'Start New Day',
                     style: TextStyle(
                       fontSize: 15,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
@@ -408,22 +402,19 @@ class TotalsCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
-                color: Colors.grey[700],
+                color: Colors.yellowAccent,
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Icon(
-                    FontAwesomeIcons.clock,
-                    color: Colors.yellowAccent,
-                    size: 18,
-                  ),
-                  SizedBox(width: 10,),
+                  SizedBox(width: 15,),
                   Text(
                     'Total Time',
                     style: TextStyle(
                       fontSize: 15,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
