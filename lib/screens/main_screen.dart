@@ -179,6 +179,7 @@ class CurrentActivityCard extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Expanded(
+                    flex: 2,
                     child: Container(
                       padding: EdgeInsets.only(left: 20),
                       child: Column(
@@ -201,12 +202,14 @@ class CurrentActivityCard extends StatelessWidget {
                     ),
                   ),
                   Expanded(
+                    flex: 3,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         Row(
                           children: <Widget>[
                             Expanded(
+                              flex: 2,
                               child: Text(
                                 'CATEGORY',
                                 style: TextStyle(
@@ -218,6 +221,7 @@ class CurrentActivityCard extends StatelessWidget {
                               ),
                             ),
                             Expanded(
+                              flex: 3,
                               child: Text(
                                 task.categoryTitle,
                                 style: TextStyle(
@@ -231,6 +235,7 @@ class CurrentActivityCard extends StatelessWidget {
                         Row(
                           children: <Widget>[
                             Expanded(
+                              flex: 2,
                               child: Text(
                                 'START TIME',
                                 style: TextStyle(
@@ -242,6 +247,7 @@ class CurrentActivityCard extends StatelessWidget {
                               ),
                             ),
                             Expanded(
+                              flex: 3,
                               child: Text(
                                 task.printRawStartTime(),
                                 style: TextStyle(
