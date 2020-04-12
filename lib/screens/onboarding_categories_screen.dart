@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:time_keeper/screens/categories_screen.dart';
 import 'package:time_keeper/screens/onboarding_task_screen.dart';
-import 'package:time_keeper/services/globals.dart';
 import 'package:time_keeper/services/models.dart';
 import 'package:time_keeper/shared/loading.dart';
 

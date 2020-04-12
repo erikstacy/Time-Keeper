@@ -156,10 +156,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         },
       );
     }
-
-    setState(() {
-      isLoading = false;
-    });
   }
 }
 
