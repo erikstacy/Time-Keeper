@@ -107,7 +107,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),
               ),
-              onPressed: () => registerButtonPress(context),
+              onPressed: () async => registerButtonPress(context),
             ),
           ],
         ),
