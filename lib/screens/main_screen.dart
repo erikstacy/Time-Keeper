@@ -8,6 +8,7 @@ import 'package:time_keeper/screens/task_screen.dart';
 import 'package:time_keeper/screens/totals_screen.dart';
 import 'package:time_keeper/services/auth.dart';
 import 'package:time_keeper/services/models.dart';
+import 'package:time_keeper/shared/loading.dart';
 
 class MainScreen extends StatefulWidget {
 
@@ -27,39 +28,47 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
 
     List<Category> categoryList = Provider.of<List<Category>>(context);
-    categoryList.sort((a, b) => a.chooseTimeToCompare(0).compareTo(b.chooseTimeToCompare(0)));
-    categoryList = categoryList.reversed.toList();
-
     task = Provider.of<Task>(context);
     User user = Provider.of<User>(context);
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        appBar: AppBar(
-          title: Text('Time Keeper'),
+    if (categoryList != null && task != null && user != null) {
+
+      categoryList.sort((a, b) => a.chooseTimeToCompare(0).compareTo(b.chooseTimeToCompare(0)));
+      categoryList = categoryList.reversed.toList();
+
+      return SafeArea(
+        child: Scaffold(
           backgroundColor: Colors.black,
-          elevation: 0,
-          centerTitle: true,
-        ),
-        drawer: MainDrawer(),
-        body: SmartRefresher(
-          enablePullDown: true,
-          header: WaterDropHeader(),
-          controller: refreshController,
-          onRefresh: _onRefresh,
-          onLoading: _onLoading,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              CurrentActivityCard(task: task,),
-              NewDayCard(categoryList: categoryList, task: task, user: user,),
-              TotalsCard(categoryList: categoryList,),
-            ],
+          appBar: AppBar(
+            title: Text('Time Keeper'),
+            backgroundColor: Colors.black,
+            elevation: 0,
+            centerTitle: true,
+          ),
+          drawer: MainDrawer(),
+          body: SmartRefresher(
+            enablePullDown: true,
+            header: WaterDropHeader(),
+            controller: refreshController,
+            onRefresh: _onRefresh,
+            onLoading: _onLoading,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                CurrentActivityCard(task: task,),
+                NewDayCard(categoryList: categoryList, task: task, user: user,),
+                TotalsCard(categoryList: categoryList,),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    } else {
+      return Align(
+        alignment: Alignment.center,
+        child: Loader(),
+      );
+    }
   }
 
   void _onRefresh() {

@@ -21,19 +21,6 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-
-    _auth.getUser.then(
-      (user) {
-        if (user != null) {
-          Navigator.pushReplacementNamed(context, MainScreen.id);
-        }
-      },
-    );
-  }
-
-  @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();

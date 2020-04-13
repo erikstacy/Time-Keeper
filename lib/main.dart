@@ -9,6 +9,7 @@ import 'package:time_keeper/screens/onboarding_categories_screen.dart';
 import 'package:time_keeper/screens/onboarding_info_screen.dart';
 import 'package:time_keeper/screens/onboarding_task_screen.dart';
 import 'package:time_keeper/screens/register_screen.dart';
+import 'package:time_keeper/screens/splash_screen.dart';
 import 'package:time_keeper/screens/task_screen.dart';
 import 'package:time_keeper/screens/totals_screen.dart';
 import 'package:time_keeper/services/auth.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Time Keeper',
-        initialRoute: LoginScreen.id,
+        initialRoute: SplashScreen.id,
         routes: {
           RegisterScreen.id: (context) => RegisterScreen(),
           LoginScreen.id: (context) => LoginScreen(),
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
           OnboardingCategoriesScreen.id: (context) => OnboardingCategoriesScreen(),
           OnboardingTaskScreen.id: (context) => OnboardingTaskScreen(),
           OnboardingInfoScreen.id: (context) => OnboardingInfoScreen(),
+          SplashScreen.id: (context) => SplashScreen(),
         },
         theme: ThemeData.dark(),
       ),
