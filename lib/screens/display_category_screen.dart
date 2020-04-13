@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:time_keeper/screens/categories_screen.dart';
-import 'package:time_keeper/screens/main_screen.dart';
 import 'package:time_keeper/services/globals.dart';
 import 'package:time_keeper/services/models.dart';
 import 'package:time_keeper/shared/loading.dart';

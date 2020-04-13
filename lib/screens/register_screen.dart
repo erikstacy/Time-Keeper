@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:time_keeper/screens/onboarding_categories_screen.dart';
-import 'package:time_keeper/services/auth.dart';
 import 'package:time_keeper/services/form_validation.dart';
 import 'package:time_keeper/shared/loading.dart';
 import 'package:time_keeper/shared/warning_alert.dart';
@@ -15,7 +14,6 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
 
-  AuthService _auth = AuthService();
   String email = "";
   String password = "";
 
@@ -156,6 +154,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         },
       );
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 }
 

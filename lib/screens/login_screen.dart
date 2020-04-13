@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:time_keeper/screens/main_screen.dart';
 import 'package:time_keeper/screens/register_screen.dart';
-import 'package:time_keeper/services/auth.dart';
 import 'package:time_keeper/services/form_validation.dart';
 import 'package:time_keeper/shared/warning_alert.dart';
 
@@ -16,7 +15,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
-  AuthService _auth = AuthService();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 

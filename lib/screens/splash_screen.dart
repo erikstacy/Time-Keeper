@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:time_keeper/screens/login_screen.dart';
 import 'package:time_keeper/screens/main_screen.dart';
 import 'package:time_keeper/services/auth.dart';
-import 'package:time_keeper/shared/loading.dart';
 
 class SplashScreen extends StatefulWidget {
 

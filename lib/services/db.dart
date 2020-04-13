@@ -58,7 +58,6 @@ class Collection<T> {
 }
 
 class UserDocument<T> {
-  final Firestore _db = Firestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Stream<T> get documentStream {
@@ -94,7 +93,6 @@ class UserDocument<T> {
 }
 
 class UserCollection<T> {
-  final Firestore _db = Firestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final String path;
 
