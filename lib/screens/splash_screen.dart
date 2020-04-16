@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:time_keeper/screens/login_screen.dart';
 import 'package:time_keeper/screens/main_screen.dart';
@@ -16,11 +17,35 @@ class _SplashScreenState extends State<SplashScreen> {
 
   AuthService _auth = AuthService();
 
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
   @override
   void initState() {
     super.initState();
 
+    var initializationSettingsAndroid = new AndroidInitializationSettings('@mipmap/ic_launcher'); 
+
+    var initializationSettingsIOS = new IOSInitializationSettings();
+
+    var initializationSettings = new InitializationSettings(initializationSettingsAndroid, initializationSettingsIOS);
+
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+
+    flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
+
     _getUser();
+  }
+
+  Future onSelectNotification(String payload) async {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return new AlertDialog(
+          title: Text("PayLoad"),
+          content: Text("Payload : $payload"),
+        );
+      },
+    );
   }
 
   @override
