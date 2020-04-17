@@ -47,8 +47,8 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
     }else if(state == AppLifecycleState.paused){
       // user is about quit our app temporally
       var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'your channel id', 'your channel name', 'your channel description', importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
-      var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+        'your channel id', 'your channel name', 'your channel description', importance: Importance.Max, priority: Priority.High, ticker: 'ticker', playSound: false, enableVibration: false);
+      var iOSPlatformChannelSpecifics = IOSNotificationDetails(presentSound: false);
       var platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
       flutterLocalNotificationsPlugin.show(0, '${task.categoryTitle}', 'Start Time: ${task.printRawStartTime()}', platformChannelSpecifics,);
     }
