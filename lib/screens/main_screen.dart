@@ -50,7 +50,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
         'your channel id', 'your channel name', 'your channel description', importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
       var iOSPlatformChannelSpecifics = IOSNotificationDetails();
       var platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-      flutterLocalNotificationsPlugin.show(0, 'Time Keeper', '${task.categoryTitle} - ${task.printRawStartTime()}', platformChannelSpecifics,);
+      flutterLocalNotificationsPlugin.show(0, '${task.categoryTitle}', 'Start Time: ${task.printRawStartTime()}', platformChannelSpecifics,);
     }
   }
 

@@ -40,10 +40,13 @@ class _SplashScreenState extends State<SplashScreen> {
     showDialog(
       context: context,
       builder: (_) {
+        return null;
+        /*
         return new AlertDialog(
           title: Text("PayLoad"),
           content: Text("Payload : $payload"),
         );
+        */
       },
     );
   }
