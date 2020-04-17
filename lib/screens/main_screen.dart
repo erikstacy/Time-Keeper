@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:time_keeper/screens/categories_screen.dart';
 import 'package:time_keeper/screens/login_screen.dart';
+import 'package:time_keeper/screens/settings.dart';
 import 'package:time_keeper/screens/task_screen.dart';
 import 'package:time_keeper/screens/totals_screen.dart';
 import 'package:time_keeper/services/auth.dart';
@@ -152,6 +153,13 @@ class MainDrawer extends StatelessWidget {
             title: Text('Categories'),
             onTap: () {
               Navigator.pushNamed(context, CategoriesScreen.id);
+            },
+          ),
+          ListTile(
+            leading: Icon(FontAwesomeIcons.cog),
+            title: Text('Settings'),
+            onTap: () {
+              Navigator.pushNamed(context, SettingsScreen.id);
             },
           ),
           ListTile(
