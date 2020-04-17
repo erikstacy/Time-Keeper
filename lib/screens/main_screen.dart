@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:time_keeper/screens/categories_screen.dart';
 import 'package:time_keeper/screens/login_screen.dart';
+import 'package:time_keeper/screens/settings.dart';
 import 'package:time_keeper/screens/task_screen.dart';
 import 'package:time_keeper/screens/totals_screen.dart';
 import 'package:time_keeper/services/auth.dart';
@@ -18,11 +21,43 @@ class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
 
   RefreshController refreshController = RefreshController(initialRefresh: false);
 
   Task task;
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+
+  @override
+  void initState() { 
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      // user returned to our app
+    } else if (state == AppLifecycleState.inactive) {
+      // app is inactive
+    } else if (state == AppLifecycleState.paused) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      if((prefs.getBool('enable_notifications') ?? false)) {
+        var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+          'your channel id', 'your channel name', 'your channel description', importance: Importance.Max, priority: Priority.High, ticker: 'ticker', playSound: false, enableVibration: false);
+        var iOSPlatformChannelSpecifics = IOSNotificationDetails(presentSound: false);
+        var platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+        flutterLocalNotificationsPlugin.show(0, '${task.categoryTitle}', 'Start Time: ${task.printRawStartTime()}', platformChannelSpecifics,);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +157,13 @@ class MainDrawer extends StatelessWidget {
             title: Text('Categories'),
             onTap: () {
               Navigator.pushNamed(context, CategoriesScreen.id);
+            },
+          ),
+          ListTile(
+            leading: Icon(FontAwesomeIcons.cog),
+            title: Text('Settings'),
+            onTap: () {
+              Navigator.pushNamed(context, SettingsScreen.id);
             },
           ),
           ListTile(

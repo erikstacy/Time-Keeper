@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:time_keeper/screens/categories_screen.dart';
 import 'package:time_keeper/screens/display_category_screen.dart';
@@ -9,6 +10,7 @@ import 'package:time_keeper/screens/onboarding_categories_screen.dart';
 import 'package:time_keeper/screens/onboarding_info_screen.dart';
 import 'package:time_keeper/screens/onboarding_task_screen.dart';
 import 'package:time_keeper/screens/register_screen.dart';
+import 'package:time_keeper/screens/settings.dart';
 import 'package:time_keeper/screens/splash_screen.dart';
 import 'package:time_keeper/screens/task_screen.dart';
 import 'package:time_keeper/screens/totals_screen.dart';
@@ -16,9 +18,18 @@ import 'package:time_keeper/services/auth.dart';
 import 'package:time_keeper/services/globals.dart';
 import 'package:time_keeper/services/models.dart';
 
-void main() => runApp(MyApp());
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+void main() {
+  runApp(
+    MaterialApp(
+      home: MyApp(),
+    ),
+  );
+}
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
 
@@ -46,6 +57,7 @@ class MyApp extends StatelessWidget {
           OnboardingTaskScreen.id: (context) => OnboardingTaskScreen(),
           OnboardingInfoScreen.id: (context) => OnboardingInfoScreen(),
           SplashScreen.id: (context) => SplashScreen(),
+          SettingsScreen.id: (context) => SettingsScreen(),
         },
         theme: ThemeData.dark(),
       ),
