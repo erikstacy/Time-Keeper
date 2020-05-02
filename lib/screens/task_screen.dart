@@ -160,7 +160,12 @@ class _TaskScreenState extends State<TaskScreen> {
 
   void _selectTime(BuildContext context) async {
     final TimeOfDay picked = await showTimePicker(context: context, initialTime: TimeOfDay.now());
-    DateTime newTime = new DateTime(endTime.year, endTime.month, endTime.day, picked.hour, picked.minute);
+    DateTime newTime;
+    if (endTime.day != task.startTime.day) {
+      newTime = new DateTime(endTime.year, endTime.month, endTime.day - 1, picked.hour, picked.minute);
+    } else {
+      newTime = new DateTime(endTime.year, endTime.month, endTime.day, picked.hour, picked.minute);
+    }
 
     if (picked != null && task.startTime.compareTo(newTime) < 0) {
       setState(() {
