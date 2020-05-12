@@ -93,22 +93,29 @@ class _TaskScreenState extends State<TaskScreen> {
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    _selectTime(context);
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          _printFormattedTime(endTime),
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
+                Theme(
+                  data: Theme.of(context).copyWith(
+                    accentColor: Colors.blue,
+                  ),
+                  child: Builder(
+                    builder: (context) => GestureDetector(
+                      onTap: () {
+                        _selectTime(context);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              _printFormattedTime(endTime),
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                            ),
+                            Icon(Icons.arrow_drop_down,),
+                          ],
                         ),
-                        Icon(Icons.arrow_drop_down,),
-                      ],
+                      ),
                     ),
                   ),
                 ),
