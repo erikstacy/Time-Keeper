@@ -31,11 +31,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
 
-    flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
     _getUser();
   }
 
+  /*
   Future onSelectNotification(String payload) async {
     showDialog(
       context: context,
@@ -50,6 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
       },
     );
   }
+  */
 
   @override
   Widget build(BuildContext context) {
